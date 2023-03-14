@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="170.152" height="135.883" viewBox="0 0 170.152 135.883">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.631" y1="1" x2="0.638" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#61e1cb"/>
+      <stop offset="1" stop-color="#00e16f"/>
+    </linearGradient>
+  </defs>
+  <g id="empty" transform="translate(7321.576 -2092.442)">
+    <rect id="Rectangle_624" data-name="Rectangle 624" width="125" height="88" transform="translate(-7285.406 2102.883)" fill="#d2ffff"/>
+    <rect id="Rectangle_625" data-name="Rectangle 625" width="43" height="39" transform="translate(-7285.406 2102.883)" fill="#fff"/>
+    <path id="Icon_awesome-images" data-name="Icon awesome-images" d="M137.143,111.964v4.571a13.714,13.714,0,0,1-13.714,13.714H13.714A13.714,13.714,0,0,1,0,116.536V43.393A13.714,13.714,0,0,1,13.714,29.679h4.571V89.107a22.883,22.883,0,0,0,22.857,22.857Zm27.429-22.857V15.964A13.714,13.714,0,0,0,150.857,2.25H41.143A13.714,13.714,0,0,0,27.429,15.964V89.107a13.714,13.714,0,0,0,13.714,13.714H150.857A13.714,13.714,0,0,0,164.571,89.107ZM73.143,29.679A13.714,13.714,0,1,1,59.429,15.964,13.714,13.714,0,0,1,73.143,29.679ZM45.714,70.821,61.576,54.96a3.429,3.429,0,0,1,4.849,0l11.29,11.29,38.719-38.719a3.429,3.429,0,0,1,4.849,0l25,25v32H45.714Z" transform="translate(-7318.615 2093.933)" fill="url(#linear-gradient)"/>
+    <line id="Line_32" data-name="Line 32" y1="128" x2="164" transform="translate(-7318.5 2096.383)" fill="none" stroke="#f4f6fa" stroke-width="10"/>
+  </g>
+</svg>

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="985" viewBox="0 0 1920 985">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="534" height="139" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-bg-points">
+      <rect width="1920" height="985"/>
+    </clipPath>
+  </defs>
+  <g id="bg-points" clip-path="url(#clip-bg-points)">
+    <rect width="1920" height="985" fill="#fff"/>
+    <g id="header">
+      <g id="Group_1063" data-name="Group 1063">
+        <g id="Group_1062" data-name="Group 1062">
+          <rect id="Rectangle_1" data-name="Rectangle 1" width="1931" height="1002" transform="translate(-11)" fill="none"/>
+        </g>
+      </g>
+      <g id="Repeat_Grid_7" data-name="Repeat Grid 7" transform="translate(20 846)" clip-path="url(#clip-path)">
+        <g transform="translate(-111 -380)">
+          <circle id="Ellipse_112" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(-31 -380)">
+          <circle id="Ellipse_112-2" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(49 -380)">
+          <circle id="Ellipse_112-3" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(129 -380)">
+          <circle id="Ellipse_112-4" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(209 -380)">
+          <circle id="Ellipse_112-5" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(289 -380)">
+          <circle id="Ellipse_112-6" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(369 -380)">
+          <circle id="Ellipse_112-7" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(-111 -300)">
+          <circle id="Ellipse_112-8" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(-31 -300)">
+          <circle id="Ellipse_112-9" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(49 -300)">
+          <circle id="Ellipse_112-10" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(129 -300)">
+          <circle id="Ellipse_112-11" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(209 -300)">
+          <circle id="Ellipse_112-12" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(289 -300)">
+          <circle id="Ellipse_112-13" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+        <g transform="translate(369 -300)">
+          <circle id="Ellipse_112-14" data-name="Ellipse 112" cx="15" cy="15" r="15" transform="translate(111 380)" fill="#e6e6e6"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

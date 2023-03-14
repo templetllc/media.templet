@@ -1,0 +1,55 @@
+/*feedback start*/  
+
+body.markActive {
+    cursor: url('office-push-pin.png'), auto;
+}
+  
+#feedbackPanel {
+    position: fixed;
+    background: #444;
+    color: #fff;
+    height: 100%;
+    width: 300px;
+    left: -300px;
+    top:0;
+    transition: left 0.4s ease-in-out;
+    -webkit-transition: left 0.4s ease-in-out;
+    z-index: 100;
+}
+/*#feedbackPanel:hover {
+  left: 0px;
+}*/
+
+#feedbackPanelCaller {
+    position: absolute;
+    top: 50px;
+    left: 300px;        /* same as #panel width */
+    background: #444;
+    padding:10px;
+    cursor:pointer;
+}
+
+.comments-header {
+    margin-top: 60px;
+    padding: 0 10px;
+}
+
+.feedbackMark {
+    width: 30px;
+    height: 30px;
+    background: blue;
+    color: white;
+    position: absolute;
+    border-radius: 15px;
+    cursor: pointer;
+    text-align: center;
+    z-index: 99;
+}
+
+.feedbackMark-resolved {
+    background: #ffc107;
+}
+
+.feedbackComment {
+    padding: 10px;
+}

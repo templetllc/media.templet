@@ -1,0 +1,66 @@
+//
+// Base styles
+//
+
+.alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 24px;
+    border: 0 solid transparent;
+    border-radius: 0.25rem;
+}
+
+// Headings for larger alerts
+.alert-heading {
+    // Specified to prevent conflicts of changing $headings-color
+    color: inherit;
+}
+
+// Provide class for links that match alerts
+.alert-link {
+  font-weight: 700;
+}
+
+.alert-success {
+    color: #516a35;
+    background-color: #ebf5e0;
+    border-color: #e3f1d4;
+
+    .alert-link {
+        color: #0b2e13;
+    }
+}
+
+
+// Dismissible alerts
+//
+// Expand the right padding and account for the close button's positioning.
+
+.alert-dismissible {
+    padding-right: 4rem;
+
+    // Adjust close link position
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 2;
+        padding: 0.75rem 1.25rem;
+        color: inherit;
+
+        float: right;
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        opacity: .5;
+    }
+}
+
+button.close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    outline: none;
+}

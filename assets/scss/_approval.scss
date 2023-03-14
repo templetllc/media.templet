@@ -1,0 +1,86 @@
+.gallery-approval {
+    .img-item {
+        position: relative;
+        border-radius: 3px;
+        border: 2px solid transparent !important;
+        .img {
+            border-radius: 3px;
+            border: 1px solid rgba(112, 112, 122, 0.2)!important;
+            &.active {
+                border: 2px solid #23DD87 !important;
+                border-radius: 3px;
+            }
+            height: 180px;
+            width: 100%;
+		    object-fit: cover;
+		    object-position: center;
+        }
+        .form-check-input:checked {
+            background-color: #23dd87;
+            border-color: rgb(35 221 135);
+        }
+        .form-check {
+            position: absolute;
+            padding: 0;
+            z-index: 2;
+            .form-check-input {
+                padding: 9px;
+                margin: 9px;
+            }
+        }
+
+        div#overlay {
+            position: absolute;
+            z-index: 1;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            -webkit-transition: opacity 0.3s;
+            transition: opacity 0.3s;
+            border-radius: 3px;
+            background: rgb(11,11,11);
+            background: -moz-linear-gradient(180deg, rgba(11,11,11,0.3) 0%, rgba(11,11,11,0) 100%);
+            background: -webkit-linear-gradient(180deg, rgba(11,11,11,0.3) 0%, rgba(11,11,11,0) 100%);
+            background: linear-gradient(180deg, rgba(11,11,11,0.3) 0%, rgba(11,11,11,0) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0b0b0b",endColorstr="#0b0b0b",GradientType=1);
+            &::before {
+                content: '';
+                display: block;
+                background-image: url('../images/search.svg');
+                height: 20px;
+                width: 20px;
+                position: absolute;
+                right: 0;
+                margin: 10px;
+            }
+        }
+
+        &:hover div#overlay {
+        	opacity:1;
+        }
+    }
+}
+
+.gallery-wrapper-detail {
+    img {
+        position: relative;
+        top: 0px;
+        left: 0px;
+        width: auto;
+        height: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+        right: 0px;
+        max-height: 70vh;
+        max-width: 825px;
+        margin: 0px auto;
+    }
+}
+
+.bottom-menu {
+    height: 70px;
+    .h-70 {
+        height: 70px;
+    }
+}

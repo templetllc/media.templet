@@ -1,0 +1,70 @@
+/**
+ * @license
+ * MyFonts Webfont Build ID 4108171, 2021-06-23T17:04:47-0400
+ * 
+ * The fonts listed in this notice are subject to the End User License
+ * Agreement(s) entered into by the website owner. All other parties are 
+ * explicitly restricted from using the Licensed Webfonts(s).
+ * 
+ * You may obtain a valid license at the URLs below.
+ * 
+ * Webfont: Nexa-Thin by Fontfabric
+ * URL: https://www.myfonts.com/fonts/font-fabric/nexa/thin/
+ * 
+ * Webfont: Nexa-Light by Fontfabric
+ * URL: https://www.myfonts.com/fonts/font-fabric/nexa/light/
+ * 
+ * Webfont: Nexa-Book by Fontfabric
+ * URL: https://www.myfonts.com/fonts/font-fabric/nexa/book/
+ * 
+ * Webfont: Nexa-Regular by Fontfabric
+ * URL: https://www.myfonts.com/fonts/font-fabric/nexa/regular/
+ * 
+ * Webfont: Nexa-Bold by Fontfabric
+ * URL: https://www.myfonts.com/fonts/font-fabric/nexa/bold/
+ * 
+ * Webfont: Nexa-ExtraBold by Fontfabric
+ * URL: https://www.myfonts.com/fonts/font-fabric/nexa/xbold/
+ * 
+ * Webfont: Nexa-Heavy by Fontfabric
+ * URL: https://www.myfonts.com/fonts/font-fabric/nexa/heavy/
+ * 
+ * 
+ * Webfonts copyright: Copyright © 2012 by Fontfabric. All rights reserved.
+ * 
+ * © 2021 MyFonts Inc
+*/
+
+
+/* @import must be at top of file, otherwise CSS will not work */
+@import url("//hello.myfonts.net/count/3eaf8b");
+  
+@font-face {
+  font-family: "Nexa-Bold";
+  src: url('webFonts/NexaBold/font.woff2') format('woff2'), url('webFonts/NexaBold/font.woff') format('woff');
+}
+@font-face {
+  font-family: "Nexa-Light";
+  src: url('webFonts/NexaLight/font.woff2') format('woff2'), url('webFonts/NexaLight/font.woff') format('woff');
+}
+@font-face {
+  font-family: "Nexa-Thin";
+  src: url('webFonts/NexaThin/font.woff2') format('woff2'), url('webFonts/NexaThin/font.woff') format('woff');
+}
+@font-face {
+  font-family: "Nexa-Heavy";
+  src: url('webFonts/NexaHeavy/font.woff2') format('woff2'), url('webFonts/NexaHeavy/font.woff') format('woff');
+}
+@font-face {
+  font-family: "Nexa-ExtraBold";
+  src: url('webFonts/NexaExtraBold/font.woff2') format('woff2'), url('webFonts/NexaExtraBold/font.woff') format('woff');
+}
+@font-face {
+  font-family: "Nexa-Book";
+  src: url('webFonts/NexaBook/font.woff2') format('woff2'), url('webFonts/NexaBook/font.woff') format('woff');
+}
+@font-face {
+  font-family: "Nexa-Regular";
+  src: url('webFonts/NexaRegular/font.woff2') format('woff2'), url('webFonts/NexaRegular/font.woff') format('woff');
+}
+
