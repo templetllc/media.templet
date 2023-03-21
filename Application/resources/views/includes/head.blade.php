@@ -46,7 +46,7 @@
 @if(\Request::segment(1) == "home" || \Request::segment(1) == "public" || \Request::segment(2) == "gallery" )
 	<link href="{{ asset('assets/css/vendor/select2/select2.min.css') }}" rel="stylesheet"/>
 @endif
-@if(Request::segment(1) == "approvals" && Request::segment(2) == "detail")
+@if(Request::segment(2) == "approvals" && Request::segment(3) == "detail")
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 	<link rel="stylesheet" href="{{ asset('assets/feedback/css/feedback.css') }}">
 @endif

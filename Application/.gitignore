@@ -11,3 +11,17 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+public/ib
+public/assets
+public/css
+public/images
+public/js
+public/path
+public/favicon.ico
+public/image.json
+public/index.php
+public/mediamanager.sublime-project
+public/mix-manifest.json
+public/robots.txt
+public/sftp-config.json
+public/web.config

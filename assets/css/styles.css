@@ -231,13 +231,24 @@ a:hover {
   max-width: 234px;
 }
 
+.page-item .page-link {
+  background-color: white;
+  border-color: white;
+}
+
 .page-item.active .page-link {
-  background-color: #05C46B;
-  border-color: #05C46B;
+  background-color: #23DD8B;
+  border-color: #23DD8B;
 }
 
 .pagination .page-link:hover {
-  color: #07c46c;
+  color: #23DD8B;
+}
+
+.page-item.active .page-link:hover {
+    background-color: #07c46c;
+    border-color: #07c46c;
+    color: white;
 }
 
 .select2-container {

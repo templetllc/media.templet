@@ -43,7 +43,7 @@ Route::group(['middleware' => 'check.installation'], function () {
     Route::group(['middleware' => 'adminredirect'], function () {
         // Home page routes
         //Route::get('/', [App\Http\Controllers\Pages\HomeController::class, 'index']);
-        
+
         // Pages routes
         //Route::get('page/{slug}', [App\Http\Controllers\Pages\PagesController::class, 'index']);
         //Route::post('page/contact/send', [App\Http\Controllers\Pages\ContactController::class, 'sendMsg'])->name('send.msg');
@@ -84,10 +84,12 @@ Route::group(['middleware' => 'check.installation'], function () {
         Route::post('/upload/modal', [App\Http\Controllers\Pages\UploadController::class, 'Upload'])->name('uploadModal');
 
         //Approvals
-        Route::get('/approvals/{status?}', [App\Http\Controllers\Pages\ApprovalController::class, 'approvals'])->name('approvals');
+        Route::get('/approvals/{status?}', [App\Http\Controllers\Pages\ApprovalController::class, 'redirect'])->name('redirect.approvals');
         Route::get('/approvals/approve/{id}', [App\Http\Controllers\Pages\ApprovalController::class, 'approve'])->name('approvals.approve');
         Route::get('/approvals/unapprove/{id}', [App\Http\Controllers\Pages\ApprovalController::class, 'unapprove'])->name('approvals.unapprove');
-        Route::get('/approvals/detail/{id}', [App\Http\Controllers\Pages\ApprovalController::class, 'detail'])->name('approvals.detail');
+        Route::get('/approvals/detail/{status?}/{id}', [App\Http\Controllers\Pages\ApprovalController::class, 'redirect'])->name('redirect.approvals.detail');
+        Route::get('/{asset_type}/approvals/{status?}', [App\Http\Controllers\Pages\ApprovalController::class, 'approvals'])->name('approvals');
+        Route::get('/{asset_type}/approvals/detail/{id}/{status?}', [App\Http\Controllers\Pages\ApprovalController::class, 'detail'])->name('approvals.detail');
 
         // View image page
         Route::get('ib/{image_id}', [App\Http\Controllers\Pages\ViewImageController::class, 'index'])->name('ib.view');
@@ -138,7 +140,7 @@ Route::group(['middleware' => 'check.installation'], function () {
                 Route::get('admin/user/ban/{id}', [App\Http\Controllers\Admin\UsersController::class, 'banUser'])->middleware('only.ajax');
                 Route::get('admin/user/unban/{id}', [App\Http\Controllers\Admin\UsersController::class, 'unbanUser'])->middleware('only.ajax');
                 Route::post('admin/user/edit/store', [App\Http\Controllers\Admin\UsersController::class, 'editUserStore'])->name('update.user');
-                
+
                 Route::get('admin/preset', [App\Http\Controllers\Admin\PresetController::class, 'index'])->name('preset.index');
                 Route::post('admin/preset/add', [App\Http\Controllers\Admin\PresetController::class, 'addPreset']);
                 Route::get('admin/preset/{id}', [App\Http\Controllers\Admin\PresetController::class, 'editPreset'])->name('preset.edit');

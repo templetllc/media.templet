@@ -67,7 +67,7 @@
       });
    </script>
 @endif
-@if(Request::segment(1) == "approvals")
+@if(Request::segment(2) == "approvals")
    <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.5.0/dist/lazyload.min.js"></script>
    <script src="{{ asset('assets/js/approval.image.js') }}"></script>
    <script type="text/javascript">
@@ -76,7 +76,7 @@
       });
    </script>
 @endif
-@if(Request::segment(1) == "approvals" && Request::segment(2) == "detail")
+@if(Request::segment(2) == "approvals" && Request::segment(3) == "detail")
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
    <script src="{{ asset('assets/feedback/js/feedback.js') }}" type="text/javascript"></script>
 @endif
