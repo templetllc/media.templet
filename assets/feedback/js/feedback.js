@@ -154,6 +154,7 @@ $(function(){
 	//Open & Close panel feedback
 	$('[data-action="feedback"]').click(function(e) {
         e.preventDefault();
+        e.stopPropagation();
         $('#feedback-wrapper').toggleClass('toggled');
         $('body').toggleClass('show-feedback');
         $('.feedback-pin[visible="visible"]').show();

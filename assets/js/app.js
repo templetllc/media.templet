@@ -3141,4 +3141,60 @@
         });
     })();
 
+    (function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-top-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            var options = {
+                delay: {
+                    show: 50,
+                    hide: 50
+                },
+                html: true,
+                placement: 'top'
+            };
+            return new bootstrap.Tooltip(tooltipTriggerEl, options);
+        });
+    })();
+
+    (function() {
+        const shareLinkTriggerList = [].slice.call(document.querySelectorAll('[data-action="copyDetailImageUrl"]'));
+
+        shareLinkTriggerList.forEach(shareLinkTriggerEl => {
+            let isShowingCopy = false
+
+            shareLinkTriggerEl.addEventListener('click', () => {
+                const value = window.location.href;
+
+                if (!isShowingCopy) {
+                    navigator.clipboard.writeText(value)
+                        .then(() => {
+                            isShowingCopy = true;
+
+                            const tooltipOpts = {
+                                delay: { show: 50, hide: 50 },
+                                html: true,
+                                placement: 'top'
+                            };
+                            $(shareLinkTriggerEl).tooltip('hide')
+                            $(shareLinkTriggerEl).tooltip('dispose')
+                            $(shareLinkTriggerEl).attr('title', 'Copied!')
+                            $(shareLinkTriggerEl).attr('data-original-title', 'Copied!')
+                            $(shareLinkTriggerEl).tooltip(tooltipOpts)
+                            $(shareLinkTriggerEl).tooltip('show')
+
+                            setTimeout(() => {
+                                isShowingCopy = false;
+                                $(shareLinkTriggerEl).tooltip('hide')
+                                $(shareLinkTriggerEl).tooltip('dispose')
+                                $(shareLinkTriggerEl).attr('title', 'Share')
+                                $(shareLinkTriggerEl).attr('data-original-title', 'Share')
+                                $(shareLinkTriggerEl).tooltip(tooltipOpts)
+                                $(shareLinkTriggerEl).tooltip('show')
+                            }, 2000)
+                        })
+                }
+            })
+        })
+    })();
+
 })));
