@@ -44,6 +44,10 @@ class ApprovalController extends Controller
     public function approvals($type, $status = "")
     {
 
+        if (!in_array($type, array('images', 'icons'))) {
+            return redirect()->route('approvals', 'images');
+        }
+
         if(empty(Auth::user()->category))
         {
             return redirect()->route('landing');
