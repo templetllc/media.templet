@@ -5,7 +5,7 @@
     <span class="tag detail-tag">Approved</span>
 @endif
 @if($image->approval === 0)
-    <span class="tag-unapproved detail-tag">Unapproved</span>
+    <span class="tag tag-unapproved detail-tag">Unapproved</span>
 @endif
 <div class="imgbob_dash image-detail-container">
     <div class="content" data-base="">
@@ -13,9 +13,9 @@
         <section class="gallery-wrapper-detail py-4 mt-4" data-id="{{ $image->id }}">
             <div class="container-fluid">
                 <div class="row d-flex align-items-center justify-content-between mx-0">
-                    <div class="col-2">
+                    <div class="col-2 p-0">
                         @if($prev_image)
-                            <a href="{{ route('approvals.detail', array_merge(array($type, $prev_image->id, $status), ['page' => $prev_image_page])) }}" class="btn btn-link">
+                            <a href="{{ route('approvals.detail', array_merge(array($type, $prev_image->id, $status), ['page' => $prev_image_page])) }}" class="btn btn-link p-0">
                                 <svg id="chevron" xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39">
                                     <rect id="bg" width="39" height="39" rx="19.5" fill="#e3e3e5"/>
                                     <g id="chevron-left" transform="translate(15.803 13)">
@@ -30,9 +30,9 @@
                             <img id="img_{{ $image->id }}" src="{{ $image->image_path }}" class="lazy img-fluid img rounded-1"  />
                         </div>
                     </div>
-                    <div class="col-2">
+                    <div class="col-2 p-0">
                         @if($next_image)
-                        <a href="{{ route('approvals.detail', array_merge(array($type, $next_image->id, $status), ['page' => $next_image_page])) }}" class="btn btn-link float-end">
+                        <a href="{{ route('approvals.detail', array_merge(array($type, $next_image->id, $status), ['page' => $next_image_page])) }}" class="btn btn-link float-end p-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39">
                                 <g id="chevron" transform="translate(39 39) rotate(180)">
                                   <rect id="bg" width="39" height="39" rx="19.5" fill="#e3e3e5"/>

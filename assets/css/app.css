@@ -2879,7 +2879,7 @@ textarea.form-control.is-invalid {
     border: 1px solid transparent;
     padding: 0.4375rem 1rem;
     font-size: 0.875rem !important;
-    border-radius: 3px;
+    border-radius: 6px;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -3561,25 +3561,24 @@ fieldset:disabled .btn {
 }
 
 .tag {
-    background: #23DD87;
+    background: #ffbc00;
+    color: white;
     position: absolute;
     bottom: 10px;
     left: 10px;
-    padding: 7px 12px;
-    border-radius: 13px;
-    color: white;
+    padding: 5px 10px;
+    border-radius: 100px;
     line-height: 16px;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    max-width: calc(100% - 20px);
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .tag-unapproved {
     background: #E7E7E8;
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    padding: 7px 12px;
-    border-radius: 13px;
     color: #999DA7;
-    line-height: 16px;
 }
 
 .account_pages {

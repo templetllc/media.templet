@@ -130,9 +130,8 @@ class ApprovalController extends Controller
         }
 
         //Status
-        if ($status == "") {
-            $images = $images->whereNull('approval');
-        } else {
+        if ($status !== "") {
+            // $images = $images->whereNull('approval');
             $image_status = $this->getStatus($status);
             if ($image_status > -1) {
                 $images = $images->where('approval', $image_status);
@@ -177,6 +176,8 @@ class ApprovalController extends Controller
             return redirect()->route('approvals', 'images');
         }
 
+        $group = 1;
+
         $image_status = $this->getStatus($status);
 
         $category_id = Auth::user()->category;
@@ -185,7 +186,9 @@ class ApprovalController extends Controller
         $images_query = Image::query()
                     ->where('method', 1)
                     ->where('active', 1)
-                    ->where('category', $category);
+                    ->where('category', $category)
+                    ->where('gallery', $group)
+                    ->with('user');
 
         if ($type == 'images') {
             $images_query = $images_query
@@ -210,17 +213,12 @@ class ApprovalController extends Controller
         $total_query = clone $images_query;
         $images_query = clone $images_query->orderByDesc('id');
 
-        if ($status == "") {
-            $total = $total_query->whereNull('approval')->count();
-            $images = $images_query->whereNull('approval')->get();
+        if ($image_status > -1) {
+            $total = $total_query->where('approval', $image_status)->count();
+            $images = $images_query->where('approval', $image_status)->get();
         } else {
-            if ($image_status > -1) {
-                $total = $total_query->where('approval', $image_status)->count();
-                $images = $images_query->where('approval', $image_status)->get();
-            } else {
-                $total = $total_query->count();
-                $images = $images_query->get();
-            }
+            $total = $total_query->count();
+            $images = $images_query->get();
         }
 
 

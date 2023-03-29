@@ -17,11 +17,17 @@
                     </button>
                     @if(Request::segment(3)=="detail")
                     <div class="navbar-nav">
-                        <a class="nav-link d-flex" href="{{ route('approvals', array_merge(array($type, $status), request()->query())) }}">
-                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" fill="none">
-                                <path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 10H2m0 0l7-7m-7 7l7 7"/>
+                        <a class="nav-link d-flex p-0" href="{{ route('approvals', array_merge(array($type, $status), request()->query())) }}">
+                            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" fill="none">
+                                <path
+                                    stroke="#3B3A3C"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M18 10H2m0 0l7-7m-7 7l7 7"
+                                />
                             </svg>
-                            <span class="nav-link-title">
+                            <span class="nav-link-title color-black-olive">
                                 Back
                             </span>
                         </a>
@@ -77,7 +83,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item active">
-                                        <a class="nav-link pl-0" href="{{ route('approvals', array('icons', $status)) }}">
+                                        <a class="nav-link" href="{{ route('approvals', array('icons', $status)) }}">
                                             <span class="nav-link-icon d-md-none d-lg-inline-block w-3">
                                                 <svg xmlns="http://www.w3.org/2000/svg" id="ico-icons" width="13" height="13" viewBox="0 0 13 13">
                                                     <path
@@ -124,14 +130,14 @@
                         <div class="navbar navbar-light">
                             <div class="container-fluid">
                                 <ul class="navbar-nav" id="countImages">
-                                    <li class="nav-item">
+                                    <!-- <li class="nav-item">
                                         <a class="nav-link pl-0" href="{{ route('approvals', $type) }}">
                                             <span class="nav-link-title {{$status == '' ? 'color-mountain-meadow NexaBold' : ''}}">No status ({{ isset($count_approval[""]) ? $count_approval[""]:0 }})</span>
                                         </a>
-                                    </li>
+                                    </li> -->
                                     <li class="nav-item">
-                                        <a class="nav-link pl-0" href="{{ route('approvals', array($type, 'all')) }}">
-                                            <span class="nav-link-title {{$status == 'all' ? 'color-mountain-meadow NexaBold' : ''}}">All ({{ $counts }})</span>
+                                        <a class="nav-link pl-0" href="{{ route('approvals', array($type)) }}">
+                                            <span class="nav-link-title {{($status == 'all' || $status == '') ? 'color-mountain-meadow NexaBold' : ''}}">All ({{ $counts }})</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -162,12 +168,12 @@
                                             <span class="nav-link-title NexaBold color-black-olive" data-toggle="deselectAll">Deselect all</span>
                                         </a>
                                     </li>
-                                    <li class="me-2">
+                                    <li class="nav-item me-2">
                                         <a href="#" class="btn btn-outline-primary w-100" data-toggle="unapprovalImage">
                                             {{__('Unapproved')}}
                                         </a>
                                     </li>
-                                    <li>
+                                    <li class="nav-item">
                                         <a href="#" class="btn btn-primary w-100" data-toggle="approvalImage">
                                             {{__('Approved')}}
                                         </a>

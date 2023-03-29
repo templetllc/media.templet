@@ -552,6 +552,18 @@ a:hover {
   border-radius: 3px;
   border: 2px solid transparent !important;
 }
+
+.gallery-approval .icon-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #eeeff2;
+  max-height: 150px;
+  min-height: 150px;
+  border: 1px solid rgba(112, 112, 112, 0.2);
+  border-radius: 3px;
+}
+
 .gallery-approval .img-item .img {
   border-radius: 3px;
   border: 1px solid rgba(112, 112, 122, 0.2) !important;
@@ -560,24 +572,34 @@ a:hover {
   object-fit: cover;
   object-position: center;
 }
-.gallery-approval .img-item .img.active {
+
+.gallery-approval .icon-item .icon {
+  position: relative;
+  max-width: 40%;
+  max-height: 40%;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+
+.gallery-approval .img-item .img.active, .gallery-approval .img-icon .icon.active{
   border: 2px solid #23DD87 !important;
   border-radius: 3px;
 }
-.gallery-approval .img-item .form-check-input:checked {
+.gallery-approval .img-item .form-check-input:checked, .gallery-approval .img-icon .form-check-input:checked {
   background-color: #23dd87;
   border-color: rgb(35, 221, 135);
 }
-.gallery-approval .img-item .form-check {
+.gallery-approval .img-item .form-check, .gallery-approval .icon-item .form-check {
   position: absolute;
   padding: 0;
   z-index: 2;
 }
-.gallery-approval .img-item .form-check .form-check-input {
+.gallery-approval .img-item .form-check .form-check-input, .gallery-approval .icon-item .form-check .form-check-input {
   padding: 9px;
   margin: 9px;
 }
-.gallery-approval .img-item div#overlay {
+.gallery-approval .img-item div#overlay, .gallery-approval .icon-item div#overlay {
   position: absolute;
   z-index: 1;
   overflow: hidden;
@@ -593,7 +615,7 @@ a:hover {
   background: linear-gradient(180deg, rgba(11, 11, 11, 0.3) 0%, rgba(11, 11, 11, 0) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0b0b0b",endColorstr="#0b0b0b",GradientType=1);
 }
-.gallery-approval .img-item div#overlay::before {
+.gallery-approval .img-item div#overlay::before, .gallery-approval .icon-item div#overlay::before {
   content: "";
   display: block;
   background-image: url("../images/search.svg");
@@ -603,7 +625,7 @@ a:hover {
   right: 0;
   margin: 10px;
 }
-.gallery-approval .img-item:hover div#overlay {
+.gallery-approval .img-item:hover div#overlay, .gallery-approval .icon-item:hover div#overlay {
   opacity: 1;
 }
 
@@ -673,6 +695,7 @@ a:hover {
   border-radius: 3px;
   border-color: #23DD8B !important;
   margin: 0 5px;
+  border-radius: 6px;
 }
 .pagination .nav-link a:hover {
   color: white !important;
