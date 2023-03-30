@@ -25,9 +25,9 @@
                             $title = $image->description . (empty($image->preset) ? '' : ' - '.$image->preset);
                         @endphp
                         @if(file_exists('ib/thumbnails/thumb_'.$image_name))
-                            <img id="img_{{ $image->id }}" class="lazy img-fluid {{ $type === 'icons' ? 'icon' : 'img' }}" src="{{ url('ib/thumbnails/thumb_'.$image_name) }}" />
+                            <img id="img_{{ $image->id }}" class="lazy img-fluid {{ $type === 'icons' ? 'img-icon' : 'img' }}" src="{{ url('ib/thumbnails/thumb_'.$image_name) }}" />
                         @else
-                            <img id="img_{{ $image->id }}" class="lazy img-fluid {{ $type === 'icons' ? 'icon' : 'img' }}" src="{{ $image->image_path }}" />
+                            <img id="img_{{ $image->id }}" class="lazy img-fluid {{ $type === 'icons' ? 'img-icon' : 'img' }}" src="{{ $image->image_path }}" />
                         @endif
                     </a>
                 </div>
