@@ -3197,4 +3197,19 @@
         })
     })();
 
+    (function() {
+        const galleryWrapperDetail = document.querySelector('.gallery-wrapper-detail');
+        if (!!galleryWrapperDetail) {
+            (function checkDetailImageLoaded(img) {
+                if (!img.complete) {
+                    setTimeout(() => {
+                        checkDetailImageLoaded(img)
+                    }, 50)
+                } else {
+                    galleryWrapperDetail.querySelector('.skeleton').classList.add('d-none')
+                }
+            })(galleryWrapperDetail.querySelector('img'))
+        }
+    }());
+
 })));
