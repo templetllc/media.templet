@@ -197,8 +197,10 @@ class ApprovalController extends Controller
                             ->where(function ($query) {
                                 $query->where('thumbnail', 0)->orWhereNull('thumbnail');
                             });
+            $page_size = 48;
         } else {
             $images_query = $images_query->where('thumbnail', 1);
+            $page_size = 120;
         }
 
         if ($id) {
@@ -229,7 +231,6 @@ class ApprovalController extends Controller
         $next_image = ($index < count($ids) - 1) ? $images[$index + 1] : null;
 
         $index = $index + 1;
-        $page_size = 48;
         $prev_image_page = ceil(($index > 0 ? $index - 1 : $index) / $page_size);
         $next_image_page = ceil(($index < count($ids) - 1 ? $index + 1 : $index) / $page_size);
         $page = ceil($index / $page_size);
