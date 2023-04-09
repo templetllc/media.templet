@@ -154,10 +154,11 @@ $(function(){
 	//Open & Close panel feedback
 	$('[data-action="feedback"]').click(function(e) {
         e.preventDefault();
-        e.stopPropagation();
+        $('.feedback-pin[visible="visible"]').toggle();
         $('#feedback-wrapper').toggleClass('toggled');
         $('body').toggleClass('show-feedback');
-        $('.feedback-pin[visible="visible"]').show();
+
+        e.stopPropagation();
     });
 
     //Open & Close panel feedback
@@ -165,6 +166,7 @@ $(function(){
         e.preventDefault();
         $('#feedback-wrapper').toggleClass('toggled');
         $('body').toggleClass('show-feedback');
+		$('.feedback-pin[visible="visible"]').hide();
 
         if($('body').hasClass('active_feedback')){
         	$('body').toggleClass('active_feedback');

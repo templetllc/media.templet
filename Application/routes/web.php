@@ -86,7 +86,9 @@ Route::group(['middleware' => 'check.installation'], function () {
         //Approvals
         Route::get('/approvals/{status?}', [App\Http\Controllers\Pages\ApprovalController::class, 'redirect'])->name('redirect.approvals');
         Route::get('/approvals/approve/{id}', [App\Http\Controllers\Pages\ApprovalController::class, 'approve'])->name('approvals.approve');
+        Route::post('/approvals/approve/multiple', [App\Http\Controllers\Pages\ApprovalController::class, 'approveMultiple'])->name('approvals.approveMultiple');
         Route::get('/approvals/unapprove/{id}', [App\Http\Controllers\Pages\ApprovalController::class, 'unapprove'])->name('approvals.unapprove');
+        Route::post('/approvals/unapprove/multiple', [App\Http\Controllers\Pages\ApprovalController::class, 'unapproveMultiple'])->name('approvals.unapproveMultiple');
         Route::get('/approvals/detail/{status?}/{id}', [App\Http\Controllers\Pages\ApprovalController::class, 'redirect'])->name('redirect.approvals.detail');
         Route::get('/{asset_type}/approvals/{status?}', [App\Http\Controllers\Pages\ApprovalController::class, 'approvals'])->name('approvals');
         Route::get('/{asset_type}/approvals/detail/{id}/{status?}', [App\Http\Controllers\Pages\ApprovalController::class, 'detail'])->name('approvals.detail');

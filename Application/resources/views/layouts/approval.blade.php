@@ -153,11 +153,9 @@
                                 </ul>
                                 {{-- <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last"> --}}
                                 <ul class="navbar-nav flex-row order-md-last pt-1" id="actionImages">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#" onclick="event.preventDefault();">
-                                            <span class="nav-link-title NexaBold color-black-olive">Select (<span id="selected">0</span>)</span>
-                                        </a>
-                                    </li>
+                                    <span class="nav-link">
+                                        <span class="nav-link-title NexaBold color-black-olive">Items selected (<span id="selected">0</span>)</span>
+                                    </span>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">
                                             <span class="nav-link-title NexaBold color-black-olive" data-toggle="selectAll">Select all</span>
@@ -168,16 +166,26 @@
                                             <span class="nav-link-title NexaBold color-black-olive" data-toggle="deselectAll">Deselect all</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item me-2">
-                                        <a href="#" class="btn btn-outline-primary w-100" data-toggle="unapprovalImage">
-                                            {{__('Unapproved')}}
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="btn btn-primary w-100" data-toggle="approvalImage">
-                                            {{__('Approved')}}
-                                        </a>
-                                    </li>
+                                    @if($status === 'approved' || $status === '')
+                                        <li class="nav-item me-2">
+                                            <button
+                                                class="btn {{$status === 'approved' ? 'btn-primary' : 'btn-outline-primary'}} w-100"
+                                                data-toggle="unapprovalImage"
+                                            >
+                                                {{__('Unapprove')}}
+                                            </button>
+                                        </li>
+                                    @endif
+                                    @if($status === 'unapproved' || $status === '')
+                                        <li class="nav-item">
+                                            <button
+                                                class="btn btn-primary w-100"
+                                                data-toggle="approvalImage"
+                                            >
+                                                {{__('Approve')}}
+                                            </button>
+                                        </li>
+                                    @endif
                                 </ul>
                                 {{-- </div> --}}
                             </div>

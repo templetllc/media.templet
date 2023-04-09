@@ -7,6 +7,7 @@ use App\Models\Image;
 use App\Models\Category;
 use Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 class ApprovalController extends Controller
 {
@@ -114,7 +115,7 @@ class ApprovalController extends Controller
                                 ->where('category', $category)
                                 ->where('thumbnail', 0);
             }
-            $paginate = 120;
+            $paginate = 48;
             break;
 
             case 2: //Icons
@@ -125,7 +126,7 @@ class ApprovalController extends Controller
                 $images = $images->where('thumbnail', 1)->where('category', $category);
                 $images_count = $images_count->where('thumbnail', 1)->where('category', $category);
             }
-            $paginate = 120;
+            $paginate = 48;
             break;
         }
 
@@ -168,6 +169,16 @@ class ApprovalController extends Controller
     {
         $updateUnapprove = Image::where('id', $id)->update(['approval' => 0]);
 
+    }
+
+    public function approveMultiple(Request $request)
+    {
+        Image::whereIn('id', $request->ids)->update(['approval' => 1]);
+    }
+
+    public function unapproveMultiple(Request $request)
+    {
+        Image::whereIn('id', $request->ids)->update(['approval' => 0]);
     }
 
     public function detail($type, $id, $status = '')
