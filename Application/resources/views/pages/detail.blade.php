@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-7">
                         <div class="img-item mb-2 text-center d-flex justify-content-center">
-                            <div class="overflow-hidden position-relative">
+                            <div class="overflow-hidden position-relative" id="img_{{ $image->id }}_wrapper">
                                 <div class="skeleton"></div>
                                 <img id="img_{{ $image->id }}" src="{{ $image->image_path }}" class="lazy img-fluid img rounded-1"  />
                             </div>
@@ -110,12 +110,15 @@
             $(this).removeClass('loading');
         });
 
-        var _imageId = $('.gallery-wrapper-detail').data('id');
-        let feedback = new feedbackClass(_imageId+'.json');
-        feedback.init({
+        const imageId = $('.gallery-wrapper-detail').data('id');
+
+        new FeedbackModule({
+            jsonFile: `${imageId}.json`,
             offsetTop: "110",
-            path: "/assets/"
-        });
+            path: "/assets/",
+            feedbackElements: [document.getElementById(`img_${imageId}`)],
+            disableOverlay: true
+        }).init();
     };
 
 </script>

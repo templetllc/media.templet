@@ -35,7 +35,7 @@ if($data){
         //Marks
         $resolved = ($status == 2) ? 'feedback-pin_resolved':'';
         $visibled = ($status == 2) ? 'visible="hidden"':'visible="visible"';
-        $marks .= '<div id="feedback-pin'.$fb_item.'" '.$visibled.' class="feedback-pin '.$resolved.'" feedbackIndex="'.$fb_item.'" leftPosition="'.$feedback->leftPosition.'" topPosition="'.$feedback->topPosition.'" style="left: '.$left.'px; top: '.$top.'px">';
+        $marks .= '<div id="feedback-pin'.$fb_item.'" '.$visibled.' class="feedback-pin '.$resolved.'" feedbackIndex="'.$fb_item.'" leftPosition="'.$feedback->leftPosition.'" topPosition="'.$feedback->topPosition.'" style="left: '.$left.'px; top: '.$top.'px" parentid="'.$feedback->parentId.'">';
         $marks .= '<span>'.$fb_item.'</span></div>';
 
         if($status == 2){ //Resolved
@@ -126,7 +126,7 @@ if($data){
 }
 if(count($feedback_element) > 0){
     echo json_encode($feedback_element);
-} 
+}
 
 
 ?>

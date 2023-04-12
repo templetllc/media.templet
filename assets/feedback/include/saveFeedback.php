@@ -27,27 +27,30 @@ if($data){
 				'leftPosition'  => $newFeedback[0]->leftPosition,
 				'topPosition'   => $newFeedback[0]->topPosition,
 				'status'        => isset($newFeedback[0]->status) ? $newFeedback[0]->status : 0,
+				'parentId'      => $newFeedback[0]->parentId,
 			);
 		} else {
-			$feedbackList[] =  array(
-				'feedbackIndex' => $item,
+            $feedbackList[] =  array(
+                'feedbackIndex' => $item,
 				'comment' 	    => $feedback->comment,
 				'leftPosition'  => $feedback->leftPosition,
 				'topPosition'   => $feedback->topPosition,
 				'status'        => isset($feedback->status) ? $feedback->status : 0,
+                'parentId'      => $feedback->parentId,
 			);
 		}
 	};
 };
 
 if(!$update){
-	foreach ($newFeedback as $content) {
-		$feedbackList[] =  array(
-			'feedbackIndex' => ++$item,
+    foreach ($newFeedback as $content) {
+        $feedbackList[] =  array(
+            'feedbackIndex' => ++$item,
 			'comment' 	    => $content->comment,
 			'leftPosition'  => $content->leftPosition,
 			'topPosition'   => $content->topPosition,
 			'status'        => 1,
+            'parentId'      => $content->parentId,
 		);
 	}
 }
