@@ -126,7 +126,7 @@ class ApprovalController extends Controller
                 $images = $images->where('thumbnail', 1)->where('category', $category);
                 $images_count = $images_count->where('thumbnail', 1)->where('category', $category);
             }
-            $paginate = 48;
+            $paginate = 120;
             break;
         }
 
