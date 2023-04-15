@@ -29,7 +29,14 @@
                         <div class="img-item mb-2 text-center d-flex justify-content-center">
                             <div class="overflow-hidden position-relative" id="img_{{ $image->id }}_wrapper">
                                 <div class="skeleton"></div>
-                                <img id="img_{{ $image->id }}" src="{{ $image->image_path }}" class="lazy img-fluid img rounded-1"  />
+                                @php
+                                    $image_name = substr(strrchr($image->image_path, "/"), 1);
+                                @endphp
+                                @if(file_exists('ib/details/detail_'.$image_name))
+                                    <img id="img_{{ $image->id }}" src="{{ url('ib/details/detail_'.$image_name) }}" class="lazy img-fluid img rounded-1" />
+                                @else
+                                   <img id="img_{{ $image->id }}" src="{{ $image->image_path }}" class="lazy img-fluid img rounded-1" />
+                                @endif
                             </div>
                         </div>
                     </div>
