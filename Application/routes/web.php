@@ -112,19 +112,17 @@ Route::group(['middleware' => 'check.installation'], function () {
         });
 
         // If auth is admin
-        Route::group(['middleware' => 'adminredirect'], function () {
-            // Middleware for check if user has email and password
-            Route::group(['middleware' => 'CheckFordetails'], function () {
-                // User routes
-                Route::get('user/dashboard', [App\Http\Controllers\Pages\User\DashboardController::class, 'index']);
-                Route::get('user/dashboard/charts/images', [App\Http\Controllers\Pages\User\DashboardController::class, 'getDailyImageData'])->middleware('only.ajax');
-                Route::get('user/gallery', [App\Http\Controllers\Pages\User\GalleryController::class, 'index']);
-                Route::delete('user/gallery/delete/{id}', [App\Http\Controllers\Pages\User\GalleryController::class, 'deleteImage']);
-                Route::get('user/settings', [App\Http\Controllers\Pages\User\SettingsController::class, 'index']);
-                Route::post('user/settings/update/info', [App\Http\Controllers\Pages\User\SettingsController::class, 'updateInfo'])->name('update.info');
-                Route::post('user/settings/update/password', [App\Http\Controllers\Pages\User\SettingsController::class, 'updatePassword'])->name('update.password');
-                Route::post('user/settings/update/avatar', [App\Http\Controllers\Pages\User\SettingsController::class, 'removeAvatar'])->name('remove.avatar');
-            });
+        // Middleware for check if user has email and password
+        Route::group(['middleware' => 'CheckFordetails'], function () {
+            // User routes
+            Route::get('user/dashboard', [App\Http\Controllers\Pages\User\DashboardController::class, 'index'])->name('user.dashboard');
+            Route::get('user/dashboard/charts/images', [App\Http\Controllers\Pages\User\DashboardController::class, 'getDailyImageData'])->middleware('only.ajax');
+            Route::get('user/gallery', [App\Http\Controllers\Pages\User\GalleryController::class, 'index'])->name('user.gallery');
+            Route::delete('user/gallery/delete/{id}', [App\Http\Controllers\Pages\User\GalleryController::class, 'deleteImage']);
+            Route::get('user/settings', [App\Http\Controllers\Pages\User\SettingsController::class, 'index'])->name('user.settings');
+            Route::post('user/settings/update/info', [App\Http\Controllers\Pages\User\SettingsController::class, 'updateInfo'])->name('update.info');
+            Route::post('user/settings/update/password', [App\Http\Controllers\Pages\User\SettingsController::class, 'updatePassword'])->name('update.password');
+            Route::post('user/settings/update/avatar', [App\Http\Controllers\Pages\User\SettingsController::class, 'removeAvatar'])->name('remove.avatar');
         });
 
         Route::group(['middleware' => 'CheckFordetails'], function () {
@@ -132,7 +130,7 @@ Route::group(['middleware' => 'check.installation'], function () {
             Route::group(['middleware' => 'admin'], function () {
                 // Admin routes
                 Route::get('admin', [App\Http\Controllers\Admin\DashboardController::class, 'RedirectToDashboard']);
-                Route::get('admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
+                Route::get('admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
                 Route::get('admin/dashboard/charts/uploads', [App\Http\Controllers\Admin\DashboardController::class, 'getDailyUploadsData'])->middleware('only.ajax');
                 Route::get('admin/dashboard/charts/users', [App\Http\Controllers\Admin\DashboardController::class, 'getDailyUsersData'])->middleware('only.ajax');
                 Route::get('admin/users', [App\Http\Controllers\Admin\UsersController::class, 'index']);

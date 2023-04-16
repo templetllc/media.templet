@@ -17,7 +17,7 @@
         const SITE_URL              = "{{ url('/') }}";
         const MAX_FILES             = {{ $settings->onetime_uploads }};
         const MAX_SIZE              = {{ $settings->max_filesize }};
-        const BIG_FILES_DETECTED    = "This File Type not Allowed."; 
+        const BIG_FILES_DETECTED    = "This File Type not Allowed.";
    </script>
    @endif
    @if(Request::path() == "upload/modal" || str_contains(Request::path(), 'upload/modal') )
@@ -26,19 +26,19 @@
         const SITE_URL              = "{{ url('/') }}";
         const MAX_FILES             = 1;
         const MAX_SIZE              = {{ $settings->max_filesize }};
-        const BIG_FILES_DETECTED    = "This File Type not Allowed."; 
+        const BIG_FILES_DETECTED    = "This File Type not Allowed.";
    </script>
    @endif
    @if($__env->yieldContent('title') != "Page not found" && !str_contains(Request::path(), 'modal'))
    <header class="navbar navbar-expand-md navbar-light d-print-none @if(\Request::segment(1) == 'ib') sticky-top @endif">
       <div class="container-fluid">
-         @if(\Request::segment(1) != 'addition') 
+         @if(\Request::segment(1) != 'addition')
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
             <span class="navbar-toggler-icon"></span>
             </button>
          @endif
          <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal @if(\Request::segment(1) != 'addition') me-md-3 @endif">
-            @if(\Request::segment(1) == 'preview') 
+            @if(\Request::segment(1) == 'preview')
                <a href="{{ route('index', $client) }}">
             @else
                <a href="{{ route('home') }}">
@@ -48,7 +48,7 @@
          </h1>
          <div class="navbar-nav flex-row order-md-last">
             @guest
-               @if(\Request::segment(1) != 'register' && \Request::segment(1) != 'login') 
+               @if(\Request::segment(1) != 'register' && \Request::segment(1) != 'login')
                <li class="nav-item pe-0 pe-md-2 d-mobile-none">
                   <a href="{{ url('/login') }}" class="btn">
                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -100,7 +100,7 @@
                      </a>
                   </li>
                @else
-                  @if(\Request::segment(1) != 'upload' && \Request::segment(1) != 'preview')
+                  @if(\Request::segment(1) != 'upload' && \Request::segment(1) != 'preview' && userHasRole(Auth()->user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE)))
                      <li class="nav-item me-2">
                         <a class="nav-link" href="{{ url('/upload') }}">
                            <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -116,7 +116,7 @@
                      </li>
                   @endif
                @endif
-               @if(\Request::segment(1) != 'addition' && \Request::segment(1) != 'modal' && \Request::segment(1) != 'upload') 
+               @if(\Request::segment(1) != 'addition' && \Request::segment(1) != 'modal' && \Request::segment(1) != 'upload' && userHasRole(Auth()->user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE)))
                   <li class="nav-item pe-0 pe-md-3 d-mobile-none">
                      <a href="{{ url('user/gallery') }}" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -130,37 +130,15 @@
                      </a>
                   </li>
                @endif
-               <div class="nav-item dropdown">
-                  <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                     <span class="avatar avatar-sm" style="background-image: url({{ asset('path/cdn/avatars/'.Auth::user()->avatar) }})"></span>
-                     <div class="d-none d-xl-block ps-2">
-                        <div>{{ Auth::user()->name }}</div>
-                        <div class="mt-1 small text-muted">
-                           @if(Auth::user()->permission == 2) {{__('User')}} @elseif(Auth::user()->permission == 1) {{__('Admin')}} @endif
-                        </div>
-                     </div>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                     @if(\Request::segment(1) != 'addition')
-                     <a href="{{ url('user/dashboard') }}" class="dropdown-item">{{__('Dashboard')}}</a>
-                     <a href="{{ url('user/gallery') }}" class="dropdown-item">{{__('My Gallery')}}</a>
-                     <a href="{{ url('user/settings') }}" class="dropdown-item">{{__('Settings')}}</a>
-                     <div class="dropdown-divider"></div>
-                     @endif
-                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{__('Logout')}}</a>
-                     <form id="logout-form" action="{{ route('logout') }}" method="GET" class="d-none">
-                        @csrf
-                     </form>
-                  </div>
-               </div>
+               @include('includes/user-dropdown')
             @endguest
          </div>
-         @if(\Request::segment(1) != 'addition') 
+         @if(\Request::segment(1) != 'addition')
             <div class="collapse navbar-collapse order-md-first" id="navbar-menu">
                <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
                   <ul class="navbar-nav">
                      {{-- <li class="nav-item @if(Request::path()== '/home') active @endif">
-                        @if(\Request::segment(1) == 'preview') 
+                        @if(\Request::segment(1) == 'preview')
                            <a class="nav-link" href="{{ route('index', $client) }}">
                         @else
                            <a class="nav-link" href="{{ route('home') }}">
@@ -201,7 +179,7 @@
                            @foreach ($composerPages as $composerPage)
                            <a class="dropdown-item  @if(\Request::segment(2) == $composerPage->slug) active @endif" href="{{ url('page/'.$composerPage->slug) }}">{{ $composerPage->title }}</a>
                            @endforeach
-                           @else 
+                           @else
                            <div class="text-center">{{__('No Pages')}}</div>
                            @endif
                         </div>

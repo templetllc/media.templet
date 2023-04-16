@@ -34,28 +34,12 @@
                     </div>
                     @endif
                     <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0">
-                        <a href="{{ route('approvals', $type) }}">
+                        <a href="{{ route('home') }}">
                             <img src="{{ asset('images/main/'.$settings->logo) }}" width="110" height="32" alt="{{ $settings->site_name }}" class="navbar-brand-image" />
                         </a>
                     </h1>
                     <div class="navbar-nav flex-row order-md-last">
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                                <span class="avatar avatar-sm rounded-circle avatar-image" style="background-image: url({{ asset('path/cdn/avatars/'.Auth::user()->avatar) }})"></span>
-                                <div class="d-none d-xl-block ps-2">
-                                    <div>{{ Auth::user()->name }}</div>
-                                    <div class="mt-1 small text-muted">
-                                        @if(Auth::user()->permission == 2) {{__('User')}} @elseif(Auth::user()->permission == 1) {{__('Admin')}} @endif
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{__('Logout')}}</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="GET" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </div>
+                        @include('includes/user-dropdown')
                     </div>
                 </div>
             </header>

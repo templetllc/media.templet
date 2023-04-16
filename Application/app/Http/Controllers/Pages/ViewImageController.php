@@ -23,7 +23,7 @@ class ViewImageController extends Controller
         if ($image_id) {
             // get image  data from database
             $image = Image::where('image_id', $image_id)->with('user')->first();
-            $categories = Category::where('active', 1)->get();
+            $categories = Category::where('active', 1)->where('id', Auth()->user()->category)->get();
             $presets = Preset::where('active', 1)->get();
             // if data not null
             if ($image != null) {
@@ -53,12 +53,12 @@ class ViewImageController extends Controller
         if ($image_id) {
             // get image  data from database
             $image = Image::where('image_id', $image_id)->with('user')->first();
-            
-            $categories = Category::where('active', 1)->get();            
+
+            $categories = Category::where('active', 1)->get();
             $presets = Preset::where('active', 1)->get();
             $select_category = $category;
             $select_preset = $preset;
-            
+
             // if data not null
             if ($image != null) {
                 // Views + 1
@@ -156,16 +156,26 @@ class ViewImageController extends Controller
         }
 
         $preset = Preset::findOrFail($preset);
-        
-        
+
+
         if($result){
             // file name
             $filename = url($path) . '/' . $imageName;
             $fileSize = filesize($img_file);
             list($w, $h) = getimagesize($img_file);
 
-            $image = Image::where('image_id', $image_id);
-            $image->update([
+            $image_query = Image::where('image_id', $image_id);
+            $image = clone $image_query->first();
+
+
+            $approval = $image->approval;
+
+            if ($image->approval == 0 && $gallery == 0 && $thumbnail == 0) {
+                $approval = 1;
+            }
+
+
+            $image_query->update([
                 'image_path'  => $filename,
                 'image_size'  => $fileSize,
                 'description' => $description,
@@ -177,6 +187,7 @@ class ViewImageController extends Controller
                 'tags'        => $tags,
                 'thumbnail'   => $thumbnail,
                 'gallery'     => $gallery,
+                'approval'    => $approval,
             ]);
 
             $this->thumbnail($filename);
@@ -185,7 +196,7 @@ class ViewImageController extends Controller
         } else {
             die('An error has occurred, please try again');
         }
-        
+
     }
 
     //Update Image
@@ -197,17 +208,27 @@ class ViewImageController extends Controller
         $thumbnail   = $request->thumbnail;
         $gallery     = $request->gallery;
 
-        $image = Image::where('image_id', $image_id);
-        $image->update([
+        $image_query = Image::where('image_id', $image_id);
+        $image = clone $image_query->first();
+
+
+        $approval = $image->approval;
+
+        if ($image->approval == 0 && $gallery == 0 && $thumbnail == 0) {
+            $approval = 1;
+        }
+
+        $image_query->update([
             'category'   => $category,
             'tags'       => $tags,
             'thumbnail'  => $thumbnail,
             'gallery'    => $gallery,
+            'approval'    => $approval,
         ]);
 
-        $request->session()->flash('alert-success', 'true'); 
+        $request->session()->flash('alert-success', 'true');
         return redirect()->route('ib.view', $image_id);
-        
+
     }
 
     public function thumbnail($filename)
@@ -233,35 +254,35 @@ class ViewImageController extends Controller
 
         $max_width = 320;
         $x_ratio = $max_width / $width;
-        
+
         $new_height = ceil($x_ratio * $height);
         $new_width = $max_width;
 
         //Compress Image
-        switch($mime){ 
+        switch($mime){
             case 'image/jpeg':
                 $image_create = "imagecreatefromjpeg";
                 $image = "imagejpeg";
                 $quality = 80;
-                break; 
+                break;
 
-            case 'image/png': 
+            case 'image/png':
                 $image_create = "imagecreatefrompng";
                 $image = "imagepng";
-                break; 
+                break;
 
             case 'image/gif':
                 $image_create = "imagecreatefromgif";
                 $image = "imagegif";
-                break; 
+                break;
 
-            default: 
+            default:
                 $image_create = "imagecreatefromjpeg";
                 $image = "imagejpeg";
                 $quality = 80;
         }
 
-        $thumb = imagecreatetruecolor($new_width, $new_height); 
+        $thumb = imagecreatetruecolor($new_width, $new_height);
         $source = $image_create($src);
 
         if($mime == 'image/gif'){
@@ -270,14 +291,14 @@ class ViewImageController extends Controller
             imagealphablending($thumb, false);
             imagesavealpha($thumb, true);
 
-            imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height); 
-            
+            imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
             $image($thumb, $dirThumbnails.$thumbnail);
 
         } else {
-            // imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);    
+            // imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
             // $upload = $image($thumb, $path.$image_new, $quality);
-            imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);    
+            imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
             $image($thumb, $dirThumbnails.$thumbnail);
         }
 

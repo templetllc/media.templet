@@ -13,7 +13,7 @@
             <div class="col-md-6">
                 <div class="note note-danger print-error-msg" style="display:none"><span></span></div>
                 <form id="editUserForm" method="POST">
-                    <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}">
+                    <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}" required>
                     <div class="form-group">
                         <label for="name">{{__('User Name :')}} <span class="fsgred">*</span></label>
                         <input type="text" name="name" id="name" class="form-control" placeholder="Enter user name" value="{{ $user->name }}">
@@ -21,13 +21,13 @@
                     <div class="form-group">
                         <label for="email">{{__('Email :')}} <span class="fsgred">*</span></label>
                         <div class="input-group">
-                            <input type="text" name="email" id="email" class="remove-spaces form-control" placeholder="email" value="{{ $user->email }}">
+                            <input type="text" name="email" id="email" class="remove-spaces form-control" placeholder="email" value="{{ $user->email }}" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="status">{{__('Status :')}} <span class="fsgred">*</span></label>
                         <div class="input-group">
-                            <select name="status" id="status" class="remove-spaces form-control">
+                            <select name="status" id="status" class="remove-spaces form-control" required>
                                 <option value="1" {{ ($user->status == 1) ? 'selected':'' }}>Active</option>
                                 <option value="2" {{ ($user->status == 2) ? 'selected':'' }}>Banned</option>
                             </select>
@@ -36,9 +36,12 @@
                     <div class="form-group">
                         <label for="permission">{{__('Permission :')}} <span class="fsgred">*</span></label>
                         <div class="input-group">
-                            <select name="permission" id="permission" class="remove-spaces form-control">
-                                <option value="1" {{ ($user->permission == 1) ? 'selected':'' }}>Admin</option>
-                                <option value="2" {{ ($user->permission == 2) ? 'selected':'' }}>User</option>
+                            <select name="permission" id="permission" class="remove-spaces form-control" required>
+                                <option value="{{ADMIN_ROLE}}" {{ ($user->permission == ADMIN_ROLE) ? 'selected':'' }}>Admin</option>
+                                <option value="{{USER_ROLE}}" {{ ($user->permission == USER_ROLE) ? 'selected':'' }}>User</option>
+                                <option value="{{CONTRIBUTOR_ROLE}}" {{ ($user->permission == CONTRIBUTOR_ROLE) ? 'selected':'' }}>Contributor</option>
+                                <option value="{{MANAGER_ROLE}}" {{ ($user->permission == MANAGER_ROLE) ? 'selected':'' }}>Manager</option>
+                                <option value="{{APPROVER_ROLE}}" {{ ($user->permission == APPROVER_ROLE) ? 'selected':'' }}>Approver</option>
                             </select>
                         </div>
                     </div>
@@ -57,7 +60,7 @@
               </form>
             </div>
         </div>
-        
+
     </div>
 </div>
 @endsection
