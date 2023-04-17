@@ -76,8 +76,10 @@ Route::group(['middleware' => 'check.installation'], function () {
     Route::group(['middleware' => 'auth'], function () {
         //Route::get('/', [App\Http\Controllers\Pages\HomeController::class, 'gallery']);
         Route::get('/home', [App\Http\Controllers\Pages\HomeController::class, 'gallery'])->name('home');
-        Route::get('/upload', [App\Http\Controllers\Pages\HomeController::class, 'upload']);
-        Route::post('/upload', [App\Http\Controllers\Pages\UploadController::class, 'Upload'])->name('upload');
+        Route::group(['middleware' => 'IsSuperUser'], function () {
+            Route::get('/upload', [App\Http\Controllers\Pages\HomeController::class, 'upload']);
+            Route::post('/upload', [App\Http\Controllers\Pages\UploadController::class, 'Upload'])->name('upload');
+        });
         Route::get('/duplicate/{image_id}', [App\Http\Controllers\Pages\HomeController::class, 'duplicateImage']);
 
         Route::get('/upload/modal/{category?}/{preset?}', [App\Http\Controllers\Pages\HomeController::class, 'uploadModal']);

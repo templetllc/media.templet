@@ -22,8 +22,13 @@ class ViewImageController extends Controller
         // if get image id
         if ($image_id) {
             // get image  data from database
+            $can_see_all_categories = userHasRole(Auth::user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE));
             $image = Image::where('image_id', $image_id)->with('user')->first();
-            $categories = Category::where('active', 1)->where('id', Auth()->user()->category)->get();
+
+            $categories = $can_see_all_categories ?
+                Category::select('category', 'id')->where('active', 1)->orderBy('category', 'asc')->get() :
+                Category::select('category', 'id')->where('active', 1)->orderBy('category', 'asc')->where('id', Auth::user()->category)->get();
+
             $presets = Preset::where('active', 1)->get();
             // if data not null
             if ($image != null) {
