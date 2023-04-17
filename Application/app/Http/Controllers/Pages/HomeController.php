@@ -251,7 +251,7 @@ class HomeController extends Controller
     public function gallery()
     {
         // user images data
-        $is_admin = Auth::user()->permission === ADMIN_ROLE;
+        $can_see_all_categories = in_array(Auth::user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE));
 
         //Filtros
         $filter_category = request()->query("c");
@@ -310,7 +310,7 @@ class HomeController extends Controller
         }
 
         // Dropdowns
-        $categories = $is_admin ?
+        $categories = $can_see_all_categories ?
             Category::select('category', 'id')
                 ->where('active', 1)
                 ->orderBy('category', 'asc')
@@ -479,7 +479,7 @@ class HomeController extends Controller
                         ->appends(request()->query());
 
         //Busco las categorias Featured
-        $featured_categories = $is_admin ?
+        $featured_categories = $can_see_all_categories ?
             Category::where('active', 1)
                 ->where('featured', 1)
                 ->orderBy('category', 'asc')

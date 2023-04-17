@@ -16,7 +16,7 @@ class GalleryController extends Controller
     public function index()
     {
         $authId = Auth::user()->id; // user id
-        $is_admin = Auth::user()->permission === ADMIN_ROLE;
+        $can_see_all_categories = in_array(Auth::user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE));
 
         //Filtros
         $filter_category = request()->query("c");
@@ -69,7 +69,7 @@ class GalleryController extends Controller
 
 
         // Dropdowns
-        $categories = $is_admin ?
+        $categories = $can_see_all_categories ?
             Category::select('category', 'id')
                 ->where('active', 1)
                 ->orderBy('category', 'asc')
@@ -130,7 +130,7 @@ class GalleryController extends Controller
         //* * * * * * * * * * * * * * * * * * * * * *//
         //  Obtengo todas las imagenes del usuario  //
         //* * * * * * * * * * * * * * * * * * * * *//
-        $images = $is_admin ? Image::where('active', 1) : Image::where('user_id', $authId)->where('active', 1);
+        $images = $can_see_all_categories ? Image::where('active', 1) : Image::where('user_id', $authId)->where('active', 1);
 
         //Filtro los registros
         //Category
