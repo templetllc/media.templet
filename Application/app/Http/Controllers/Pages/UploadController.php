@@ -64,29 +64,29 @@ class UploadController extends Controller
                         if (!File::exists($path)) {
                             File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
                         }
-                        
+
                         //Compress Image
                         $mime = $request->file('uploads')->getMimeType();
-                        switch($mime){ 
+                        switch($mime){
                             case 'image/jpeg':
                                 $image_create = "imagecreatefromjpeg";
                                 $image = "imagejpeg";
                                 $quality = 80;
-                                break; 
+                                break;
 
-                            case 'image/png': 
+                            case 'image/png':
                                 $newImg = imagecreatefrompng($request->file('uploads'));
                                 $image_create = "imagecreatefrompng";
                                 $image = "imagepng";
                                 $quality = 6;
-                                break; 
+                                break;
 
                             case 'image/gif':
                                 $image_create = "imagecreatefromgif";
                                 $image = "imagegif";
-                                break; 
+                                break;
 
-                            default: 
+                            default:
                                 $image_create = "imagecreatefromjpeg";
                                 $image = "imagejpeg";
                                 $quality = 80;
@@ -129,12 +129,12 @@ class UploadController extends Controller
                             // imagecolortransparent($dst_img, $transparent);
                             imagealphablending($src_img, false);
                             imagesavealpha($src_img, true);
-                            //imagecopyresampled($src_img, $src_img, 0, 0, 0, 0, $width_new, $height_new, $width, $height);    
-                            
+                            //imagecopyresampled($src_img, $src_img, 0, 0, 0, 0, $width_new, $height_new, $width, $height);
+
                             $upload = $image($src_img, $path."/".$imageName);
 
                         } else {
-                            imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $width_new, $height_new, $width, $height);    
+                            imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $width_new, $height_new, $width, $height);
                             $upload = $image($src_img, $path."/".$imageName);
                         }
 
@@ -142,8 +142,8 @@ class UploadController extends Controller
                         if($src_img)imagedestroy($src_img);
 
                         // file name
-                        $filename = url($path) . '/' . $imageName;                        
-                        
+                        $filename = url($path) . '/' . $imageName;
+
                         //Compress TinyPNG
                         // if($width > 600){
                         //     $result = $this->compressImage($filename);
@@ -178,7 +178,8 @@ class UploadController extends Controller
                         ]);
 
                         //Create Thumbnail
-                        $this->thumbnail($imageName);
+                        $this->compressImage($imageName, "./ib/", "thumbnails/", "thumb", 310);
+                        $this->compressImage($imageName, "./ib/", "details/", "detail", 850);
 
                         // if image data created
                         if ($data) {
@@ -222,105 +223,73 @@ class UploadController extends Controller
         }
     }
 
-    public function compressImage($image){
+    private function compressImage($image, $root_dir, $compressed_dir, $prefix, $max_width) {
 
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => 'https://api.tinify.com/shrink',
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => '',
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => 'POST',
-          CURLOPT_POSTFIELDS =>'
-        {
-          "source": {
-            "url": "'.$image.'"
-          }
-        }',
-          CURLOPT_HTTPHEADER => array(
-            'Content-Type: application/json',
-            'Authorization: Basic YXBpOlBjUDA5UFMybDYzdEtYQnNSbU5ZY04wV1IzQm5WQzU0'
-          ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-        return $response;
-    }
-
-    public function thumbnail($image) {
-
-        $dir = './ib/';
-        
         //Verifico que exista la carpeta
-        $dirThumbnails = './ib/thumbnails/';
-        if(!is_dir($dirThumbnails)){
-            mkdir($dirThumbnails, 0777);
+        $dir = $root_dir.$compressed_dir;
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777);
         }
 
         //Verifico si existe el thumbnail para la imagen
-        if(!file_exists($dirThumbnails.$image)){
-            $src = $dir.$image;
-            $thumbnail = "thumb_".$image;
+        if (!file_exists($dir.$image)) {
+            $src = $root_dir.$image;
+            $compressed_image_name = $prefix."_".$image;
 
             // File and new size
             list($width, $height) = getimagesize($src);
             $mime = mime_content_type($src);
 
-            $max_width = 310;
             $x_ratio = $max_width / $width;
-            
+
             $new_height = ceil($x_ratio * $height);
             $new_width = $max_width;
 
             //Compress Image
-            switch($mime){ 
+            switch ($mime) {
                 case 'image/jpeg':
                     $image_create = "imagecreatefromjpeg";
                     $image = "imagejpeg";
-                    break; 
+                    break;
 
-                case 'image/png': 
+                case 'image/png':
                     $image_create = "imagecreatefrompng";
                     $image = "imagepng";
-                    break; 
+                    break;
 
                 case 'image/gif':
                     $image_create = "imagecreatefromgif";
                     $image = "imagegif";
-                    break; 
+                    break;
 
-                default: 
+                default:
                     $image_create = "imagecreatefromjpeg";
                     $image = "imagejpeg";
             }
 
             //Si la nueva imagen es mas pequeña que la medida minima
-            if($width > $max_width){
+            if ($width > $max_width) {
 
-                $thumb = imagecreatetruecolor($new_width, $new_height); 
+                $compressed_image = imagecreatetruecolor($new_width, $new_height);
                 $source = $image_create($src);
 
-                if($mime == 'image/gif'){
-                    //No hace nada
-                } elseif($mime == 'image/png') {
-
-                    imagealphablending($thumb, false);
-                    imagesavealpha($thumb, true);
-
-                    imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height); 
-                    
-                    $image($thumb, $dirThumbnails.$thumbnail);
-
-                } else {
-                    imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);    
-                    $image($thumb, $dirThumbnails.$thumbnail);
+                if ($mime == 'image/gif') {
+                    return;
                 }
+
+                if ($mime == 'image/png') {
+                    imagealphablending($compressed_image, false);
+                    imagesavealpha($compressed_image, true);
+
+                    imagecopyresampled($compressed_image, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+                    $image($compressed_image, $dir.$compressed_image_name);
+                    return;
+                }
+
+                imagecopyresampled($compressed_image, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+                $image($compressed_image, $dir.$compressed_image_name);
             }
 
         }

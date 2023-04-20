@@ -7,6 +7,7 @@ use App\Models\Image;
 use App\Models\Category;
 use Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 class ApprovalController extends Controller
 {
@@ -44,11 +45,13 @@ class ApprovalController extends Controller
     public function approvals($type, $status = "")
     {
 
+        $is_admin = Auth::user()->permission === ADMIN_ROLE;
+
         if (!in_array($type, array('images', 'icons'))) {
             return redirect()->route('approvals', 'images');
         }
 
-        if(empty(Auth::user()->category))
+        if(empty(Auth::user()->category) && !$is_admin)
         {
             return redirect()->route('landing');
         }
@@ -56,19 +59,25 @@ class ApprovalController extends Controller
         //* * * Categoría del Usuario * * */
         $category_id = Auth::user()->category;
         $category = Category::where('id', $category_id)->first();
-        $category = $category->category;
+        $category = $is_admin ? null : $category->category;
 
         //* * * * * * * * * * * * * * * * * * * * *//
         //        Obtengo todas las imagenes       //
         //* * * * * * * * * * * * * * * * * * * * *//
-        $images = Image::where('method', 1)
-                        ->where('active', 1)
-                        ->where('category', $category);
+        $images = $is_admin ?
+            Image::where('method', 1)
+                ->where('active', 1) :
+            Image::where('method', 1)
+                ->where('active', 1)
+                ->where('category', $category);
 
         //Counts
-        $images_count = Image::where('method', 1)
-                        ->where('active', 1)
-                        ->where('category', $category);
+        $images_count = $is_admin ?
+            Image::where('method', 1)
+                ->where('active', 1) :
+            Image::where('method', 1)
+                ->where('active', 1)
+                ->where('category', $category);
 
         //Filtro los registros
         $group = 1;     //Gallery
@@ -114,7 +123,7 @@ class ApprovalController extends Controller
                                 ->where('category', $category)
                                 ->where('thumbnail', 0);
             }
-            $paginate = 120;
+            $paginate = 48;
             break;
 
             case 2: //Icons
@@ -170,8 +179,21 @@ class ApprovalController extends Controller
 
     }
 
+    public function approveMultiple(Request $request)
+    {
+        Image::whereIn('id', $request->ids)->update(['approval' => 1]);
+    }
+
+    public function unapproveMultiple(Request $request)
+    {
+        Image::whereIn('id', $request->ids)->update(['approval' => 0]);
+    }
+
     public function detail($type, $id, $status = '')
     {
+        $is_admin = Auth::user()->permission === ADMIN_ROLE;
+
+
         if (empty($id) || empty($type) || ($status !== '' && empty($status)) || !in_array($type, array('images', 'icons'))) {
             return redirect()->route('approvals', 'images');
         }
@@ -183,12 +205,17 @@ class ApprovalController extends Controller
         $category_id = Auth::user()->category;
         $category = Category::select('category')->where('id', $category_id)->pluck('category')->first();
 
-        $images_query = Image::query()
-                    ->where('method', 1)
-                    ->where('active', 1)
-                    ->where('category', $category)
-                    ->where('gallery', $group)
-                    ->with('user');
+        $images_query = $is_admin ?
+            Image::query()
+                ->where('method', 1)
+                ->where('active', 1)
+                ->where('gallery', $group) :
+            Image::query()
+                ->where('method', 1)
+                ->where('active', 1)
+                ->where('category', $category)
+                ->where('gallery', $group)
+                ->with('user');
 
         if ($type == 'images') {
             $images_query = $images_query

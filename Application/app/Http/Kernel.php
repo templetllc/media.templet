@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'CheckFordetails' => \App\Http\Middleware\CheckFordetails::class,
         'CheckForDetailsExists' => \App\Http\Middleware\CheckForDetailsExists::class,
+        'IsSuperUser' => \App\Http\Middleware\IsSuperUser::class,
         'only.ajax' => \App\Http\Middleware\OnlyAjax::class,
         'admin' => \App\Http\Middleware\IsAdmin::class,
         'adminredirect' => \App\Http\Middleware\AdminRedirect::class,

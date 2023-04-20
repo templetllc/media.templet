@@ -8,12 +8,7 @@ use App\Models\Category;
 use App\Models\Preset;
 use Auth;
 use Illuminate\Support\Facades\File;
-use Storage;
-use Session;
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Models\Setting;
 
 class HomeController extends Controller
 {
@@ -26,33 +21,19 @@ class HomeController extends Controller
     // view home page public
     public function index($client = '')
     {
-        if(empty($client)){
+        if (empty($client)) {
             return redirect()->route('landing');
         }
 
         //Filtros
         $category = $client;
         $filter_category = "";
-        // $filter_category = request()->query("c");
-        // if(strlen($filter_category)>0){
-        //     if($filter_category > 0){
-        //         $category = Category::find($filter_category);
-        //         $category = $category->category;
-        //     } else {
-        //         $category = null;
-        //     }
-        // }
-
-        // if(auth()->check()){
-        //     $preset = "";
-        // } else {
-            $preset = null;
-        //}
+        $preset = null;
 
         $filter_preset = request()->query("p");
-        if(strlen($filter_preset)>0){
-            if($filter_preset > 0){
-                //$preset = Preset::where('value', $filter_preset)->first();
+
+        if (strlen($filter_preset) > 0) {
+            if ($filter_preset > 0) {
                 $preset = Preset::findOrFail($filter_preset);
                 $preset = $preset->id;
             } else {
@@ -63,26 +44,30 @@ class HomeController extends Controller
         $year = "";
         $month = "";
         $filter_date = request()->query("d");
-        if(strlen($filter_date)>0){
+
+        if (strlen($filter_date) > 0) {
             $year   = strstr($filter_date, "_", true);
             $month  = substr(strrchr($filter_date, "_"), 1);
         }
 
         $tag = "";
         $filter_tags = request()->query("t");
-        if(strlen($filter_tags)>0){
+
+        if (strlen($filter_tags) > 0) {
             $tag = strtoupper($filter_tags);
         }
 
         $type = 0;
         $filter_type = request()->query("s");
-        if(strlen($filter_type)>0){
+
+        if (strlen($filter_type) > 0) {
             $type = $filter_type;
         }
 
         $group = 1;
         $filter_group = request()->query("g");
-        if(strlen($filter_group)>0){
+
+        if (strlen($filter_group) > 0) {
             $group = $filter_group;
         }
 
@@ -98,75 +83,70 @@ class HomeController extends Controller
         $presets = Image::select('presets.id', 'presets.preset', 'presets.value')
                         ->where('images.active', 1)
                         ->leftjoin('presets', 'images.preset_id', '=', 'presets.id');
-        if(!empty($filter_category) || !empty($client)){
+
+        if (!empty($filter_category) || !empty($client)) {
             $presets  = $presets->where('images.category', empty($filter_category) ? $client : $filter_category);
         }
+
         $presets = $presets->distinct()->orderBy('presets.preset', 'asc')->get();
-                        //->distinct('image.preset', 'description')
-                        //->orderBy('description', 'asc')->get();
 
 
-        $dates = Image::selectRaw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name')
-                        ->where('images.active', 1);
-        if(!empty($filter_category) || !empty($client)){
+        $dates = Image::selectRaw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name')->where('images.active', 1);
+
+        if (!empty($filter_category) || !empty($client)) {
             $dates  = $dates->where('category', empty($filter_category) ? $client : $filter_category);
         }
-        $dates = $dates->distinct()->orderBy('year', 'desc')
-                ->orderBy('month', 'desc')->get();
 
-        
+        $dates = $dates->distinct()->orderBy('year', 'desc')->orderBy('month', 'desc')->get();
+
+
         //Drop Down Tags
         $image_tags = Image::select('tags')->whereNotNull('tags')
                         ->where('images.active', 1)
                         ->where('images.gallery', $group)
                         ->where('images.category', $category)
                         ->where('images.preset_id', $preset);
-                        switch($type){
-                            case 0: //Pictures
-                            $image_tags = $image_tags->where('width', '>', 200)
-                                            ->where('height', '>', 200)
-                                            ->where('thumbnail', 0);
-                            break;
 
-                            case 1: //Thumbnail
-                            if(empty($category)){
-                                $image_tags = $image_tags->where(function($query) {
-                                                        $query->where('width', '<=', 200)
-                                                            ->orWhere('height', '<=', 200);
-                                                    })
-                                                ->where('thumbnail', 0);
-                            } else {
-                                $image_tags = $image_tags->where(function($query) {
-                                                        $query->where('width', '<=', 200)
-                                                            ->orWhere('height', '<=', 200);
-                                                        })
-                                                ->where('category', $category)
-                                                ->where('thumbnail', 0);
-                            }
-                            break;
+        switch($type) {
+            case 0: //Pictures
 
-                            case 2: //Icons
-                            if(empty($category)){
-                                $image_tags = $image_tags->Where('thumbnail', 1);
-                            } else {
-                                $image_tags = $image_tags->where('thumbnail', 1)
-                                                ->where('category', $category);
-                            }
-                            break;
-                        }
-                        
+            $image_tags = $image_tags->where('width', '>', 200)
+                            ->where('height', '>', 200)
+                            ->where('thumbnail', 0);
+            break;
 
+            case 1: //Thumbnail
 
-        // $image_tags = Image::select('tags')->whereNotNull('tags')
-        //                 ->where('images.active', 1)
-        //                 ->where('images.gallery', $group)
-        //                 ->where('images.preset_id', $preset);
-        // if(!empty($category) || !empty($client) ){
-        //     $image_tags  = $image_tags->where('images.category', empty($filter_category) ? $client : $filter_category);
-        // }
+            if (empty($category)) {
+                $image_tags = $image_tags->where(function($query) {
+                                        $query->where('width', '<=', 200)
+                                            ->orWhere('height', '<=', 200);
+                                    })
+                                ->where('thumbnail', 0);
+            } else {
+                $image_tags = $image_tags->where(function($query) {
+                                        $query->where('width', '<=', 200)
+                                            ->orWhere('height', '<=', 200);
+                                        })
+                                ->where('category', $category)
+                                ->where('thumbnail', 0);
+            }
+            break;
+
+            case 2: //Icons
+
+            if (empty($category)) {
+                $image_tags = $image_tags->Where('thumbnail', 1);
+            } else {
+                $image_tags = $image_tags->where('thumbnail', 1)
+                                ->where('category', $category);
+            }
+            break;
+        }
+
         $image_tags = $image_tags->distinct()->get();
-
         $tags = array();
+
         foreach($image_tags as $arr_tags){
             $aux_tags = explode(',', $arr_tags->tags);
             foreach($aux_tags as $key => $tag_item){
@@ -185,8 +165,8 @@ class HomeController extends Controller
 
         //Filtro los registros
         //Category
-        if(!empty($category) || is_null($category)){
-            if(is_null($category)){
+        if (!empty($category) || is_null($category)) {
+            if (is_null($category)) {
                 $images = $images->whereNull('category');
             } else {
                 $images = $images->where('category', $category);
@@ -194,33 +174,33 @@ class HomeController extends Controller
         }
 
         //Client
-        if(!empty($client)){
+        if (!empty($client)) {
             $images = $images->where('category', $client);
         }
-        
+
 
         //Preset
-        if(!empty($preset) || is_null($preset)){
-            if(is_null($preset)){
+        if (!empty($preset) || is_null($preset)) {
+            if (is_null($preset)) {
                 $images = $images->whereNull('preset');
             } else {
                 $images = $images->where('preset_id', $preset);
-            };
+            }
         }
 
         //Date
-        if(!empty($year)){
+        if (!empty($year)) {
             $images = $images->whereYear('created_at', $year)
                             ->whereMonth('created_at', $month);
         }
 
         //Tags
-        if(!empty($tag)){
+        if (!empty($tag)) {
             $images = $images->where('tags', 'like', '%'.$tag.'%');
         }
 
         //Type
-        switch($type){
+        switch($type) {
             case 0: //Pictures
             $images = $images->where('width', '>', 200)
                             ->where('height', '>', 200)
@@ -229,14 +209,14 @@ class HomeController extends Controller
             break;
 
             case 1: //Thumbnail
-            if(empty($category)){
-                $images = $images->where(function($query) {
+            if (empty($category)) {
+                $images = $images->where(function ($query) {
                                         $query->where('width', '<=', 200)
                                             ->orWhere('height', '<=', 200);
                                     })
                                 ->where('thumbnail', 0);
             } else {
-                $images = $images->where(function($query) {
+                $images = $images->where(function ($query) {
                                         $query->where('width', '<=', 200)
                                             ->orWhere('height', '<=', 200);
                                         })
@@ -247,7 +227,7 @@ class HomeController extends Controller
             break;
 
             case 2: //Icons
-            if(empty($category)){
+            if (empty($category)) {
                 $images = $images->Where('thumbnail', 1);
             } else {
                 $images = $images->where('thumbnail', 1)
@@ -256,7 +236,7 @@ class HomeController extends Controller
             $paginate = 120;
             break;
         }
-       
+
         //Group
         $images = $images->where('gallery', $group);
 
@@ -271,27 +251,27 @@ class HomeController extends Controller
     public function gallery()
     {
         // user images data
-        
+        $can_see_all_categories = userHasRole(Auth::user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE));
+
         //Filtros
         $filter_category = request()->query("c");
         $category = "no_category";
-        if(strlen($filter_category)>0){
-            if($filter_category > 0){
-                $category = Category::find($filter_category);
-                $category = $category->category;
-            } elseif($filter_category == 0) {
+
+        if (strlen($filter_category) > 0) {
+            if ($filter_category > 0) {
+                $category = Category::find($filter_category)->category;
+            } elseif ($filter_category == 0) {
                 $category = null;
             } else {
-                //$category = null;
                 $category = "no_category";
             }
         }
 
         $preset = null;
         $filter_preset = request()->query("p");
-        if(strlen($filter_preset)>0){
-            if($filter_preset > 0){
-                //$preset = Preset::where('value', $filter_preset)->first();
+
+        if (strlen($filter_preset) > 0) {
+            if ($filter_preset > 0) {
                 $preset = Preset::findOrFail($filter_preset);
                 $preset = $preset->id;
             } else {
@@ -302,53 +282,60 @@ class HomeController extends Controller
         $year = "";
         $month = "";
         $filter_date = request()->query("d");
-        if(strlen($filter_date)>0){
+
+        if (strlen($filter_date) > 0) {
             $year   = strstr($filter_date, "_", true);
             $month  = substr(strrchr($filter_date, "_"), 1);
         }
 
         $tag = "";
         $filter_tags = request()->query("t");
-        if(strlen($filter_tags)>0){
+
+        if (strlen($filter_tags) > 0) {
             $tag = strtoupper($filter_tags);
         }
 
         $type = 0;
         $filter_type = request()->query("s");
-        if(strlen($filter_type)>0){
+
+        if (strlen($filter_type) > 0) {
             $type = $filter_type;
         }
 
         $group = 1;
         $filter_group = request()->query("g");
-        if(strlen($filter_group) > 0){
-            $group = $filter_group;            
+
+        if (strlen($filter_group) > 0) {
+            $group = $filter_group;
         }
 
-
         // Dropdowns
-        $categories = Image::select('categories.id', 'images.category')
-                            ->leftjoin('categories', 'images.category', '=', 'categories.category')
-                            ->where('categories.active', 1)
-                            ->where('images.active', 1)
-                            ->distinct()->orderBy('images.category', 'asc')->get('category');
+        $categories = $can_see_all_categories ?
+            Category::select('category', 'id')
+                ->where('active', 1)
+                ->orderBy('category', 'asc')
+                ->get() :
+            Category::select('category', 'id')
+                ->where('active', 1)
+                ->orderBy('category', 'asc')
+                ->where('id', Auth::user()->category)
+                ->get();
 
 
         $presets = Image::select('presets.id', 'presets.preset', 'presets.value')
                         ->where('images.active', 1)
                         ->where('images.category', $category)
                         ->leftjoin('presets', 'images.preset_id', '=', 'presets.id');
-        // if(!empty($category)){
-        //     $presets  = $presets->where('images.category', $category);
-        // }
+
         $presets = $presets->distinct()->orderBy('presets.preset', 'asc')->get();
 
 
-        $dates = Image::selectRaw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name')
-                        ->where('images.active', 1);
-        if(!empty($category)){
+        $dates = Image::selectRaw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name')->where('images.active', 1);
+
+        if (!empty($category)) {
             $dates  = $dates->where('category', $category);
         }
+
         $dates = $dates->distinct()->orderBy('year', 'desc')->orderBy('month', 'desc')->get();
 
         //Drop Down Tags
@@ -357,127 +344,129 @@ class HomeController extends Controller
                         ->where('images.gallery', $group)
                         ->where('images.category', $category)
                         ->where('images.preset_id', $preset);
-                        switch($type){
-                            case 0: //Pictures
-                            $image_tags = $image_tags->where('width', '>', 200)
-                                            ->where('height', '>', 200)
-                                            ->where('thumbnail', 0);
-                            break;
 
-                            case 1: //Thumbnail
-                            if(empty($category)){
-                                $image_tags = $image_tags->where(function($query) {
-                                                        $query->where('width', '<=', 200)
-                                                            ->orWhere('height', '<=', 200);
-                                                    })
-                                                ->where('thumbnail', 0);
-                            } else {
-                                $image_tags = $image_tags->where(function($query) {
-                                                        $query->where('width', '<=', 200)
-                                                            ->orWhere('height', '<=', 200);
-                                                        })
-                                                ->where('category', $category)
-                                                ->where('thumbnail', 0);
-                            }
-                            break;
+        switch($type) {
+            case 0: //Pictures
 
-                            case 2: //Icons
-                            if(empty($category)){
-                                $image_tags = $image_tags->Where('thumbnail', 1);
-                            } else {
-                                $image_tags = $image_tags->where('thumbnail', 1)
-                                                ->where('category', $category);
-                            }
-                            break;
-                        }
+            $image_tags = $image_tags->where('width', '>', 200)->where('height', '>', 200)->where('thumbnail', 0);
+            break;
+
+            case 1: //Thumbnail
+
+            if (empty($category)) {
+                $image_tags = $image_tags
+                                ->where(function($query) {
+                                    $query->where('width', '<=', 200)->orWhere('height', '<=', 200);
+                                })
+                                ->where('thumbnail', 0);
+            } else {
+                $image_tags = $image_tags
+                                ->where(function($query) {
+                                    $query->where('width', '<=', 200)->orWhere('height', '<=', 200);
+                                })
+                                ->where('category', $category)
+                                ->where('thumbnail', 0);
+            }
+            break;
+
+            case 2: //Icons
+            if (empty($category)) {
+                $image_tags = $image_tags->Where('thumbnail', 1);
+            } else {
+                $image_tags = $image_tags->where('thumbnail', 1)->where('category', $category);
+            }
+            break;
+        }
 
         $image_tags = $image_tags->distinct()->get();
 
         $tags = array();
-        foreach($image_tags as $arr_tags){
+
+        foreach ($image_tags as $arr_tags) {
             $aux_tags = explode(',', $arr_tags->tags);
-            foreach($aux_tags as $key => $tag_item){
+
+            foreach ($aux_tags as $key => $tag_item) {
                 $tags[] = $tag_item;
             }
-        };
+        }
+
         $tags = array_unique($tags);
         sort($tags);
 
         //* * * * * * * * * * * * * * * * * * * * *//
         //        Obtengo todas las imagenes       //
         //* * * * * * * * * * * * * * * * * * * * *//
-        $images = Image::where('method', 1)
-                        ->where('active', 1);
+        $images = Image::where('method', 1)->where('active', 1)->where('approval', 1);
 
         //Filtro los registros
+
         //Category
-        if(!empty($category) || is_null($category)){
-            if(is_null($category)){
+        if (!empty($category) || is_null($category)) {
+            if (is_null($category)) {
                 $images = $images->whereNull('category');
             } else {
                 $images = $images->where('category', $category);
-            };
+            }
         }
 
         //Preset
-        if(!empty($preset) || is_null($preset)){
-            if(is_null($preset)){
+        if (!empty($preset) || is_null($preset)) {
+            if (is_null($preset)) {
                 $images = $images->whereNull('preset');
             } else {
                 $images = $images->where('preset_id', $preset);
-            };
+            }
         }
 
         //Date
-        if(!empty($year)){
-            $images = $images->whereYear('created_at', $year)
-                            ->whereMonth('created_at', $month);
+        if (!empty($year)) {
+            $images = $images->whereYear('created_at', $year)->whereMonth('created_at', $month);
         }
 
         //Tags
-        if(!empty($tag)){
+        if (!empty($tag)) {
             $images = $images->where('tags', 'like', '%'.$tag.'%');
         }
 
         //Type
-        switch($type){
+        switch($type) {
             case 0: //Pictures
-            $images = $images->where('width', '>', 200)
-                            ->where('height', '>', 200)
-                            ->where('thumbnail', 0);
+
+            $images = $images->where('width', '>', 200)->where('height', '>', 200)->where('thumbnail', 0);
             $paginate = 72;
             break;
 
             case 1: //Thumbnail
-            if(empty($category)){
-                $images = $images->where(function($query) {
-                                        $query->where('width', '<=', 200)
-                                            ->orWhere('height', '<=', 200);
-                                    })
-                                ->where('thumbnail', 0);
+
+            if (empty($category)) {
+                $images = $images
+                            ->where(function ($query) {
+                                $query->where('width', '<=', 200)->orWhere('height', '<=', 200);
+                            })
+                            ->where('thumbnail', 0);
             } else {
-                $images = $images->where(function($query) {
-                                        $query->where('width', '<=', 200)
-                                            ->orWhere('height', '<=', 200);
-                                        })
-                                ->where('category', $category)
-                                ->where('thumbnail', 0);
+                $images = $images
+                            ->where(function ($query) {
+                                $query->where('width', '<=', 200)->orWhere('height', '<=', 200);
+                            })
+                            ->where('category', $category)
+                            ->where('thumbnail', 0);
             }
             $paginate = 120;
             break;
 
             case 2: //Icons
-            if(empty($category)){
+
+            if (empty($category)) {
                 $images = $images->Where('thumbnail', 1);
             } else {
-                $images = $images->where('thumbnail', 1)
-                                ->where('category', $category);
+                $images = $images->where('thumbnail', 1)->where('category', $category);
             }
             $paginate = 120;
             break;
         }
 
-        if(!empty($tag)){
+        if (!empty($tag)) {
             $images = $images->where('tags', 'like', '%'.$tag.'%');
         }
 
@@ -490,24 +479,33 @@ class HomeController extends Controller
                         ->appends(request()->query());
 
         //Busco las categorias Featured
-        $featured_categories = Category::where('active', 1)->where('featured', 1)->orderBy('category', 'asc')->get();
+        $featured_categories = $can_see_all_categories ?
+            Category::where('active', 1)
+                ->where('featured', 1)
+                ->orderBy('category', 'asc')
+                ->get() :
+            Category::where('active', 1)
+                ->where('featured', 1)
+                ->where('id', Auth::user()->category)
+                ->orderBy('category', 'asc')
+                ->get();
+
 
         $featured_images = array();
         //Busco las imágenes que de las categorías featured
-        foreach($featured_categories as $featured_category){
-            
+        foreach ($featured_categories as $featured_category) {
+
             $featured_image = Image::where('method', 1)
                             ->where('category', $featured_category->category)
                             ->where('active', 1)
                             ->where('gallery', 1)
-                            ->where(function($query) {
-                                    $query->where('thumbnail', 0)
-                                        ->orWhereNull('thumbnail');
-                                })
+                            ->where('approval', 1)
+                            ->where(function ($query) {
+                                $query->where('thumbnail', 0) ->orWhereNull('thumbnail');
+                            })
                             ->orderbyDesc('id')->take(5)->get();
 
-            foreach($featured_image as $image_feature)
-            {
+            foreach ($featured_image as $image_feature) {
                 $featured_images[] = array(
                     'category'    => $image_feature->category,
                     'image_id'    => $image_feature->image_id,
@@ -517,7 +515,7 @@ class HomeController extends Controller
             }
 
         }
-        
+
 
         return view('pages.gallery', compact('images', 'categories', 'presets', 'dates', 'tags', 'type', 'group', 'category', 'featured_categories', 'featured_images'));
     }
@@ -599,7 +597,7 @@ class HomeController extends Controller
         $file = "pS1IE8D49P.jpeg";
 
         $filename = "http://media.test/ib/pS1IE8D49P.jpeg";
-        
+
         echo $filename;
 
         echo "<br>";
@@ -619,35 +617,35 @@ class HomeController extends Controller
 
         // $max_width = 320;
         // $x_ratio = $max_width / $width;
-        
+
         // $new_height = ceil($x_ratio * $height);
         // $new_width = $max_width;
 
         // //Compress Image
-        // switch($mime){ 
+        // switch($mime){
         //     case 'image/jpeg':
         //         $image_create = "imagecreatefromjpeg";
         //         $image = "imagejpeg";
         //         $quality = 80;
-        //         break; 
+        //         break;
 
-        //     case 'image/png': 
+        //     case 'image/png':
         //         $image_create = "imagecreatefrompng";
         //         $image = "imagepng";
-        //         break; 
+        //         break;
 
         //     case 'image/gif':
         //         $image_create = "imagecreatefromgif";
         //         $image = "imagegif";
-        //         break; 
+        //         break;
 
-        //     default: 
+        //     default:
         //         $image_create = "imagecreatefromjpeg";
         //         $image = "imagejpeg";
         //         $quality = 80;
         // }
 
-        // $thumb = imagecreatetruecolor($new_width, $new_height); 
+        // $thumb = imagecreatetruecolor($new_width, $new_height);
         // $source = $image_create($src);
 
         // if($mime == 'image/gif'){
@@ -656,12 +654,12 @@ class HomeController extends Controller
         //     $transparent = imagecolorallocatealpha($thumb, 0, 0, 0, 127);
         //     imagefill($thumb, 0, 0, $transparent);
         //     imagecolortransparent($thumb, $transparent);
-        //     imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height); 
+        //     imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
         //     $upload = $image($thumb, $path."/".$image_new);
 
         // } else {
-        //     imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);    
+        //     imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
         //     $upload = $image($thumb, $path.$image_new, $quality);
         // }
 
@@ -693,28 +691,28 @@ class HomeController extends Controller
 
                 $max_width = 310;
                 $x_ratio = $max_width / $width;
-                
+
                 $new_height = ceil($x_ratio * $height);
                 $new_width = $max_width;
 
                 //Compress Image
-                switch($mime){ 
+                switch($mime){
                     case 'image/jpeg':
                         $image_create = "imagecreatefromjpeg";
                         $image = "imagejpeg";
-                        break; 
+                        break;
 
-                    case 'image/png': 
+                    case 'image/png':
                         $image_create = "imagecreatefrompng";
                         $image = "imagepng";
-                        break; 
+                        break;
 
                     case 'image/gif':
                         $image_create = "imagecreatefromgif";
                         $image = "imagegif";
-                        break; 
+                        break;
 
-                    default: 
+                    default:
                         $image_create = "imagecreatefromjpeg";
                         $image = "imagejpeg";
                 }
@@ -722,7 +720,7 @@ class HomeController extends Controller
                 //Si la nueva imagen es mas pequeña que la medida minima
                 if($width > $max_width){
 
-                    $thumb = imagecreatetruecolor($new_width, $new_height); 
+                    $thumb = imagecreatetruecolor($new_width, $new_height);
                     $source = $image_create($src);
 
                     if($mime == 'image/gif'){
@@ -732,12 +730,12 @@ class HomeController extends Controller
                         imagealphablending($thumb, false);
                         imagesavealpha($thumb, true);
 
-                        imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height); 
-                        
+                        imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
                         $image($thumb, $dirThumbnails.$thumbnail);
 
                     } else {
-                        imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);    
+                        imagecopyresampled($thumb, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
                         $image($thumb, $dirThumbnails.$thumbnail);
                     }
                 }
