@@ -27,9 +27,16 @@
                     </div>
                     <div class="col-7">
                         <div class="img-item mb-2 text-center d-flex justify-content-center">
-                            <div class="overflow-hidden position-relative">
+                            <div class="overflow-hidden position-relative" id="img_{{ $image->id }}_wrapper">
                                 <div class="skeleton"></div>
-                                <img id="img_{{ $image->id }}" src="{{ $image->image_path }}" class="lazy img-fluid img rounded-1"  />
+                                @php
+                                    $image_name = substr(strrchr($image->image_path, "/"), 1);
+                                @endphp
+                                @if(file_exists('ib/details/detail_'.$image_name))
+                                    <img id="img_{{ $image->id }}" src="{{ url('ib/details/detail_'.$image_name) }}" class="lazy img-fluid img rounded-1" />
+                                @else
+                                   <img id="img_{{ $image->id }}" src="{{ $image->image_path }}" class="lazy img-fluid img rounded-1" />
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -79,8 +86,22 @@
                                     <path id="stroke" d="M9.5,25.67a6.083,6.083,0,0,1-6.2-6.2,6.043,6.043,0,0,1,1.78-4.429A5.97,5.97,0,0,1,9.5,13.25h3.59a1.1,1.1,0,0,1,.825.347,1.169,1.169,0,0,1,.333.84,1.086,1.086,0,0,1-.333.8,1.121,1.121,0,0,1-.825.333H9.5a3.81,3.81,0,0,0-3.908,3.908A3.81,3.81,0,0,0,9.5,23.383h3.59a1.137,1.137,0,0,1,1.158,1.158,1.086,1.086,0,0,1-.333.8,1.121,1.121,0,0,1-.825.333Zm2-5.24a.989.989,0,0,1-.709-.261,1.015,1.015,0,0,1,0-1.39.989.989,0,0,1,.709-.261h7.585a.989.989,0,0,1,.709.261,1.015,1.015,0,0,1,0,1.39.989.989,0,0,1-.709.261Zm5.993,5.24a1.137,1.137,0,0,1-1.158-1.158,1.086,1.086,0,0,1,.333-.8,1.12,1.12,0,0,1,.825-.333h3.59a3.81,3.81,0,0,0,3.908-3.908,3.81,3.81,0,0,0-3.908-3.908h-3.59a1.137,1.137,0,0,1-1.158-1.158,1.135,1.135,0,0,1,.333-.811,1.1,1.1,0,0,1,.825-.347h3.59A6.131,6.131,0,0,1,27.3,19.474a5.97,5.97,0,0,1-1.795,4.415,6.044,6.044,0,0,1-4.429,1.78Z" transform="translate(-3.3 -13.25)" fill="#232e3c"/>
                                 </svg>
                             </button>
-                            <a href="#" class="btn btn-outline-primary ms-3" id="{{ $image->id }}" data-toggle="unapprovalDetail">Unapproved</a>
-                            <a href="#" class="btn btn-primary ms-2" id="{{ $image->id }}" data-toggle="approvalDetail">Approved</a>
+                            <button
+                                class="btn btn-outline-primary ms-3"
+                                id="{{ $image->id }}"
+                                data-toggle="unapprovalDetail"
+                                {{ $image->approval === 0 ? 'disabled' : ''}}
+                            >
+                                Unapproved
+                            </button>
+                            <button
+                                class="btn btn-primary ms-2"
+                                id="{{ $image->id }}"
+                                data-toggle="approvalDetail"
+                                {{ $image->approval === 1 ? 'disabled' : ''}}
+                            >
+                                Approved
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -96,12 +117,15 @@
             $(this).removeClass('loading');
         });
 
-        var _imageId = $('.gallery-wrapper-detail').data('id');
-        let feedback = new feedbackClass(_imageId+'.json');
-        feedback.init({
+        const imageId = $('.gallery-wrapper-detail').data('id');
+
+        new FeedbackModule({
+            jsonFile: `${imageId}.json`,
             offsetTop: "110",
-            path: "/assets/"
-        });
+            path: "/assets/",
+            feedbackElements: [document.getElementById(`img_${imageId}`)],
+            disableOverlay: true
+        }).init();
     };
 
 </script>

@@ -52,4 +52,6 @@ $app->singleton(
 |
 */
 
+require_once __DIR__.'/constants.php';
+
 return $app;

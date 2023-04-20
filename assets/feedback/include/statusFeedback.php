@@ -33,6 +33,7 @@ if($data){
 			'leftPosition'  => $feedback->leftPosition,
 			'topPosition'   => $feedback->topPosition,
 			'status'    	=> $status,
+            'parentId'      => $feedback->parentId,
 		);
 	};
 

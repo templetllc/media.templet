@@ -69,15 +69,7 @@
                   <td class="text-center">{{ $user->name }}</td>
                   <td class="text-center">{{ $user->email }}</td>
                   <td class="text-center">{{ date("d/m/y  H:i A", strtotime($user->created_at))}}</td>
-                  <td class="text-center">
-                     @if($user->permission == 2)
-                     <span class="badge bg-secondary">{{__('User')}}</span>
-                     @elseif($user->permission == 1)
-                     <span class="badge bg-primary">{{__('Admin')}}</span>
-                     @elseif($user->permission == 3)
-                     <span class="badge bg-warning">{{__('Client')}}</span>
-                     @endif
-                  </td>
+                  <td class="text-center"><span class="badge bg-primary">{{getUserRole($user)}}</span></td>
                   <td class="text-center">
                      <span class="badgeban{{ $user->id }} badge bg-danger @if($user->status == 1) d-none  @endif">{{__('Banned')}}</span>
                      <span class="badgeactive{{ $user->id }} badge bg-success @if($user->status == 2) d-none @endif">{{__('Active')}}</span>
@@ -100,7 +92,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="9 11 12 14 20 6" /><path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" /></svg>
                         {{__('Unban')}}
                      </a>
-                     
+
                   </td>
                </tr>
                @endforeach

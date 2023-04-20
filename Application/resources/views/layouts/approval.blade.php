@@ -34,28 +34,12 @@
                     </div>
                     @endif
                     <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0">
-                        <a href="{{ route('approvals', $type) }}">
+                        <a href="{{ route('home') }}">
                             <img src="{{ asset('images/main/'.$settings->logo) }}" width="110" height="32" alt="{{ $settings->site_name }}" class="navbar-brand-image" />
                         </a>
                     </h1>
                     <div class="navbar-nav flex-row order-md-last">
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                                <span class="avatar avatar-sm rounded-circle avatar-image" style="background-image: url({{ asset('path/cdn/avatars/'.Auth::user()->avatar) }})"></span>
-                                <div class="d-none d-xl-block ps-2">
-                                    <div>{{ Auth::user()->name }}</div>
-                                    <div class="mt-1 small text-muted">
-                                        @if(Auth::user()->permission == 2) {{__('User')}} @elseif(Auth::user()->permission == 1) {{__('Admin')}} @endif
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{__('Logout')}}</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="GET" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </div>
+                        @include('includes/user-dropdown')
                     </div>
                 </div>
             </header>
@@ -153,11 +137,9 @@
                                 </ul>
                                 {{-- <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last"> --}}
                                 <ul class="navbar-nav flex-row order-md-last pt-1" id="actionImages">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#" onclick="event.preventDefault();">
-                                            <span class="nav-link-title NexaBold color-black-olive">Select (<span id="selected">0</span>)</span>
-                                        </a>
-                                    </li>
+                                    <span class="nav-link">
+                                        <span class="nav-link-title NexaBold color-black-olive">Items selected (<span id="selected">0</span>)</span>
+                                    </span>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">
                                             <span class="nav-link-title NexaBold color-black-olive" data-toggle="selectAll">Select all</span>
@@ -168,16 +150,26 @@
                                             <span class="nav-link-title NexaBold color-black-olive" data-toggle="deselectAll">Deselect all</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item me-2">
-                                        <a href="#" class="btn btn-outline-primary w-100" data-toggle="unapprovalImage">
-                                            {{__('Unapproved')}}
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="btn btn-primary w-100" data-toggle="approvalImage">
-                                            {{__('Approved')}}
-                                        </a>
-                                    </li>
+                                    @if($status === 'approved' || $status === '')
+                                        <li class="nav-item me-2">
+                                            <button
+                                                class="btn {{$status === 'approved' ? 'btn-primary' : 'btn-outline-primary'}} w-100"
+                                                data-toggle="unapprovalImage"
+                                            >
+                                                {{__('Unapprove')}}
+                                            </button>
+                                        </li>
+                                    @endif
+                                    @if($status === 'unapproved' || $status === '')
+                                        <li class="nav-item">
+                                            <button
+                                                class="btn btn-primary w-100"
+                                                data-toggle="approvalImage"
+                                            >
+                                                {{__('Approve')}}
+                                            </button>
+                                        </li>
+                                    @endif
                                 </ul>
                                 {{-- </div> --}}
                             </div>

@@ -10,7 +10,7 @@
     @if($ads->mobile_ads != null)
     {!! $ads->mobile_ads !!}
     @endif
-    <body> 
+    <body>
         <div class="page">
             <header class="navbar navbar-expand-md navbar-light d-print-none">
                 <div class="container-fluid">
@@ -23,27 +23,7 @@
                         </a>
                     </h1>
                     <div class="navbar-nav flex-row order-md-last">
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                                <span class="avatar avatar-sm rounded-circle avatar-image" style="background-image: url({{ asset('path/cdn/avatars/'.Auth::user()->avatar) }})"></span>
-                                <div class="d-none d-xl-block ps-2">
-                                    <div>{{ Auth::user()->name }}</div>
-                                    <div class="mt-1 small text-muted">
-                                        @if(Auth::user()->permission == 2) {{__('User')}} @elseif(Auth::user()->permission == 1) {{__('Admin')}} @endif
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                {{-- <a href="{{ url('user/dashboard') }}" class="dropdown-item">{{__('Dashboard')}}</a> --}}
-                                <a href="{{ url('user/gallery') }}" class="dropdown-item">{{__('My Gallery')}}</a>
-                                <a href="{{ url('user/settings') }}" class="dropdown-item">{{__('Settings')}}</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{__('Logout')}}</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="GET" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </div>
+                        @include('includes/user-dropdown')
                     </div>
                 </div>
             </header>
@@ -65,24 +45,26 @@
                                         <span class="nav-link-title">{{__('Home')}}</span>
                                     </a>
                                 </li>
-                                <li class="nav-item @if(Request::path()== "user/gallery") active @endif">
-                                    <a class="nav-link" href="{{ url('user/gallery') }}">
-                                        <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <line x1="15" y1="8" x2="15.01" y2="8" />
-                                                <rect x="4" y="4" width="16" height="16" rx="3" />
-                                                <path d="M4 15l4 -4a3 5 0 0 1 3 0l5 5" />
-                                                <path d="M14 14l1 -1a3 5 0 0 1 3 0l2 2" />
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-title">
-                                            {{__('My Gallery')}}
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="nav-item @if(Request::path()== "user/settings") active @endif">
-                                    <a class="nav-link" href="{{ url('user/settings') }}">
+                                @if(userHasRole(Auth()->user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE)))
+                                    <li class="nav-item @if(Request::path()== 'user/gallery') active @endif">
+                                        <a class="nav-link" href="{{ route('user.gallery') }}">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <line x1="15" y1="8" x2="15.01" y2="8" />
+                                                    <rect x="4" y="4" width="16" height="16" rx="3" />
+                                                    <path d="M4 15l4 -4a3 5 0 0 1 3 0l5 5" />
+                                                    <path d="M14 14l1 -1a3 5 0 0 1 3 0l2 2" />
+                                                </svg>
+                                            </span>
+                                            <span class="nav-link-title">
+                                                {{__('My Gallery')}}
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endif
+                                <li class="nav-item @if(Request::path()== 'user/settings') active @endif">
+                                    <a class="nav-link" href="{{ route('user.settings') }}">
                                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -97,18 +79,53 @@
                                         </span>
                                     </a>
                                 </li>
+                                @if(userHasRole(Auth()->user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE)))
+                                    <li class="nav-item @if(Request::path()== 'user/dashboard') active @endif">
+                                        <a class="nav-link" href="{{ route('user.dashboard') }}">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                            </span>
+                                            <span class="nav-link-title">
+                                                {{__('Dashboard')}}
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endif
+                                @if(userHasRole(Auth()->user()->permission, array(ADMIN_ROLE)))
+                                    <li class="nav-item @if(Request::path()== 'admin/dashboard') active @endif">
+                                        <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                            </span>
+                                            <span class="nav-link-title">
+                                                {{__('Admin')}}
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endif
+                                @if(userHasRole(Auth()->user()->permission, array(ADMIN_ROLE, APPROVER_ROLE)))
+                                    <li class="nav-item @if(Request::path()== 'user/approvals') active @endif">
+                                        <a class="nav-link" href="{{ route('redirect.approvals', 'image') }}">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                            </span>
+                                            <span class="nav-link-title">
+                                                {{__('Approvals')}}
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endif
                             </ul>
-                            <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
-                                <a href="{{ url('/upload') }}" class="btn btn-primary w-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1" />
-                                        <polyline points="9 15 12 12 15 15" />
-                                        <line x1="12" y1="12" x2="12" y2="21" />
-                                    </svg>
-                                    {{__('Upload Images')}}
-                                </a>
-                            </div>
+                            @if(userHasRole(Auth()->user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE)))
+                                <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
+                                    <a href="{{ url('/upload') }}" class="btn btn-primary w-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1" />
+                                            <polyline points="9 15 12 12 15 15" />
+                                            <line x1="12" y1="12" x2="12" y2="21" />
+                                        </svg>
+                                        {{__('Upload Images')}}
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

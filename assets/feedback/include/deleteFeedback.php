@@ -22,7 +22,7 @@ $data = file_get_contents($feedbackFile);
 $data = json_decode($data);
 if($data){
 	foreach ($data as $key => $feedback) {
-		
+
 		if($feedback->feedbackIndex != $feedbackDelete){
 			$item++;
 			$feedbackList[] =  array(
@@ -31,6 +31,7 @@ if($data){
 				'leftPosition'  => $feedback->leftPosition,
 				'topPosition'   => $feedback->topPosition,
 				'status'        => isset($feedback->status) ? $feedback->status : 0,
+                'parentId'      => $feedback->parentId,
 			);
 		}
 	};

@@ -250,7 +250,7 @@
         });
 
         // Edit user
-        $("body").on("click", "#editUserBtn", function(e) {
+        $("body").on("submit", "#editUserForm", function(e) {
             e.preventDefault();
             $(".editUserBtn").prop("disabled", true); // disable add button when click
             
