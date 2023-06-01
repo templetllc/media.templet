@@ -28,7 +28,7 @@ class ViewImageController extends Controller
             $image = Image::where('image_id', $image_id)->with('user')->first();
 
             $categories = $can_see_all_categories ?
-                Category::select('category', 'id')->where('active', 1)->orderBy('category', 'asc')->get() :
+                Category::select('category', 'id')->where('active', 1)->whereNotIn('category', ['All', 'all', 'ALL'])->orderBy('category', 'asc')->get() :
                 Category::select('category', 'id')->where('active', 1)->orderBy('category', 'asc')->where('id', Auth::user()->category)->get();
 
             $presets = Preset::where('active', 1)->get();

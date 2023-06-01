@@ -315,6 +315,7 @@ class HomeController extends Controller
         $categories = $can_see_all_categories ?
             Category::select('category', 'id')
                 ->where('active', 1)
+                ->whereNotIn('category', ['All', 'all', 'ALL'])
                 ->orderBy('category', 'asc')
                 ->get() :
             Category::select('category', 'id')
