@@ -16,7 +16,9 @@ class GalleryController extends Controller
     public function index()
     {
         $authId = Auth::user()->id; // user id
-        $can_see_all_categories = userHasRole(Auth::user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE));
+        $user_category = Category::find(Auth::user()->category);
+
+        $can_see_all_categories = userHasRole(Auth::user()->permission, array(ADMIN_ROLE)) || Str::lower($user_category->findFirst()->category[0]) === 'all';
 
         //Filtros
         $filter_category = request()->query("c");

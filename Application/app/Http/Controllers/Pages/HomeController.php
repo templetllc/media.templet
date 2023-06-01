@@ -251,7 +251,9 @@ class HomeController extends Controller
     public function gallery()
     {
         // user images data
-        $can_see_all_categories = userHasRole(Auth::user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE));
+        $user_category = Category::find(Auth::user()->category);
+
+        $can_see_all_categories = userHasRole(Auth::user()->permission, array(ADMIN_ROLE)) || Str::lower($user_category->category) === 'all';
 
         //Filtros
         $filter_category = request()->query("c");

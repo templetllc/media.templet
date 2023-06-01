@@ -22,7 +22,9 @@ class ViewImageController extends Controller
         // if get image id
         if ($image_id) {
             // get image  data from database
-            $can_see_all_categories = userHasRole(Auth::user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE));
+            $user_category = Category::find(Auth::user()->category);
+
+            $can_see_all_categories = userHasRole(Auth::user()->permission, array(ADMIN_ROLE)) || Str::lower($user_category->category) === 'all';
             $image = Image::where('image_id', $image_id)->with('user')->first();
 
             $categories = $can_see_all_categories ?
