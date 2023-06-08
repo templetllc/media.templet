@@ -71,5 +71,7 @@ class Kernel extends HttpKernel
         'adminredirect' => \App\Http\Middleware\AdminRedirect::class,
         'IsInstalled' => \App\Http\Middleware\IsInstalled::class,
         'check.installation' => \App\Http\Middleware\CheckInstallation::class,
+        'check.userCategory' => \App\Http\Middleware\CheckUserCategory::class,
+        'check.userWithCategory' => \App\Http\Middleware\CheckUserWithCategory::class,
     ];
 }

@@ -818,4 +818,8 @@ class HomeController extends Controller
         echo $newImgID;
     }
 
+    public function noCategory() {
+        return view('pages.no-category');
+    }
+
 }
