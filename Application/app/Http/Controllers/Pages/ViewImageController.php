@@ -142,23 +142,46 @@ class ViewImageController extends Controller
             die('Base64 value is not a valid image');
         }
 
+        $size = getImageSizeFromString($imageBinary);
+        if (empty($size['mime']) || strpos($size['mime'], 'image/') !== 0) {
+            die('Base64 value is not a valid image');
+        }
+
+        $ext = substr($size['mime'], 6);
+
+        // Make sure that you save only the desired file extensions
+        if (!in_array($ext, ['png', 'gif', 'jpeg'])) {
+            die('Unsupported image type');
+        }
+
         $imageName = $image_id.".".$type;
         $img_file = $path.$imageName;
 
-        switch($type){
-            case 'png':
-                $result = imagepng($im, $img_file, 5);
-            break;
+        // switch($type){
+        //     case 'png':
+        //         //$result = imagepng($im, $img_file, 5);
+        //         $image_create = "imagecreatefrompng";
+        //         $image = "imagepng";
+        //         $quality = 6;
 
-            case 'jpg':
-                $result = imagejpeg($im, $img_file, 80);
-            break;
+        //         $src_img = $image_create($im);
+        //         imagealphablending($src_img, false);
+        //         imagesavealpha($src_img, true);
+        //         $result = $image($src_img, $img_file);
 
-            default:
-                $result = imagejpeg($im, $img_file, 80);
-            break;
+        //         if($src_img) imagedestroy($src_img);
+        //     break;
 
-        }
+        //     case 'jpg':
+        //         $result = imagejpeg($im, $img_file, 80);
+        //     break;
+
+        //     default:
+        //         $result = imagejpeg($im, $img_file, 80);
+        //     break;
+        // }
+
+        $result = file_put_contents($img_file, $imageBinary);
 
         $preset = Preset::findOrFail($preset);
 
