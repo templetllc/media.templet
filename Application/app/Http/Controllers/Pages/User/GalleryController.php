@@ -9,6 +9,7 @@ use App\Models\Preset;
 use Auth;
 use Illuminate\Support\Facades\File;
 use Storage;
+use Illuminate\Support\Str;
 
 class GalleryController extends Controller
 {
