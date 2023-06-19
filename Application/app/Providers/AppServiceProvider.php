@@ -38,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
             'layouts.approval',
             'layouts.public',
             'layouts.landing',
+            'layouts.no-category',
             'includes.head',
             'includes.footer',
             'includes.admin.head',

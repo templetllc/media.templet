@@ -9,6 +9,7 @@ use App\Models\Preset;
 use Auth;
 use Illuminate\Support\Facades\File;
 use Storage;
+use Illuminate\Support\Str;
 
 class GalleryController extends Controller
 {
@@ -16,7 +17,9 @@ class GalleryController extends Controller
     public function index()
     {
         $authId = Auth::user()->id; // user id
-        $can_see_all_categories = userHasRole(Auth::user()->permission, array(ADMIN_ROLE, CONTRIBUTOR_ROLE, MANAGER_ROLE));
+        $user_category = Category::find(Auth::user()->category);
+
+        $can_see_all_categories = userHasRole(Auth::user()->permission, array(ADMIN_ROLE)) || Str::lower($user_category->category) === 'all';
 
         //Filtros
         $filter_category = request()->query("c");
@@ -72,6 +75,7 @@ class GalleryController extends Controller
         $categories = $can_see_all_categories ?
             Category::select('category', 'id')
                 ->where('active', 1)
+                ->whereNotIn('category', ['All', 'all', 'ALL'])
                 ->orderBy('category', 'asc')
                 ->get() :
              Category::select('category', 'id')

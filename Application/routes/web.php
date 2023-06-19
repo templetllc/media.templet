@@ -73,7 +73,11 @@ Route::group(['middleware' => 'check.installation'], function () {
 
     // Route group when user login
 
-    Route::group(['middleware' => 'auth'], function () {
+    Route::middleware(['auth', 'check.userWithCategory'])->group(function() {
+        Route::get('/no-category', [App\Http\Controllers\Pages\HomeController::class, 'noCategory'])->name('no-category');
+    });
+
+    Route::middleware(['auth', 'check.userCategory'])->group(function () {
         //Route::get('/', [App\Http\Controllers\Pages\HomeController::class, 'gallery']);
         Route::get('/home', [App\Http\Controllers\Pages\HomeController::class, 'gallery'])->name('home');
         Route::group(['middleware' => 'IsSuperUser'], function () {
