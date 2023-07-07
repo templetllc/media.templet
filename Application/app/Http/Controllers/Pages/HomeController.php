@@ -399,7 +399,11 @@ class HomeController extends Controller
         //* * * * * * * * * * * * * * * * * * * * *//
         //        Obtengo todas las imagenes       //
         //* * * * * * * * * * * * * * * * * * * * *//
-        $images = Image::where('method', 1)->where('active', 1)->where('approval', 1);
+        $images = Image::where('method', 1)->where('active', 1);
+
+        if ($group == 1) {
+            $images = $images->where('approval', 1);
+        }
 
         //Filtro los registros
 
