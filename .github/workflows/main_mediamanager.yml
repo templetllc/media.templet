@@ -63,4 +63,4 @@ jobs:
           app-name: 'mediamanager'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5759F621B40B4C30A1D6F44257D343D3 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6B021E9C78CF4F8DABA55E8482BBB2F4 }}
