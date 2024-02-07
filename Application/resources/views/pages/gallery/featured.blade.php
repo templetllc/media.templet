@@ -34,7 +34,7 @@
                     @endif
                 @endforeach
                 <div class="col-md-2 see-more">
-                    <a href="?c={{ $featured_category->id }}">
+                    <a href="?c={{ $featured_category->id }}&g=1">
                         <img src="{{ asset('assets/images/btn-seeallgallery.svg') }}" alt="">
                     </a>
                 </div>

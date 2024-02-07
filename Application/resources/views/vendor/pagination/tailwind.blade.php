@@ -1,4 +1,4 @@
-@if ($paginator->hasPages())
+{{-- @if ($paginator->hasPages()) --}}
     <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="pagination d-flex flex-row justify-content-between align-items-center mt-5">
         <div class="d-flex align-items-center count-page">
             <div class="text-sm text-gray-700 leading-5">
@@ -92,4 +92,4 @@
         </ul>
 
     </nav>
-@endif
+{{-- @endif --}}
