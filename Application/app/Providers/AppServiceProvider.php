@@ -24,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        
+        if (env('APP_ENV') == 'production') {
+            URL::forceScheme('https');
+        }
+
         // Use boostrap pagination
         //Paginator::useBootstrap();
         // Shere pages data with pages layout
