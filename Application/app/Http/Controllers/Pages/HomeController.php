@@ -304,7 +304,7 @@ class HomeController extends Controller
             $type = $filter_type;
         }
 
-        $group = 1;
+        $group = 0;
         $filter_group = request()->query("g");
 
         if (strlen($filter_group) > 0) {
@@ -399,7 +399,11 @@ class HomeController extends Controller
         //* * * * * * * * * * * * * * * * * * * * *//
         //        Obtengo todas las imagenes       //
         //* * * * * * * * * * * * * * * * * * * * *//
-        $images = Image::where('method', 1)->where('active', 1)->where('approval', 1);
+        $images = Image::where('method', 1)->where('active', 1);
+        
+        if ($group == 1) {
+            $images = $images->where('approval', 1);
+        }
 
         //Filtro los registros
 
@@ -821,6 +825,5 @@ class HomeController extends Controller
     public function noCategory() {
         return view('pages.no-category');
     }
-
 
 }

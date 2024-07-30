@@ -1,0 +1,21 @@
+.NexaThin {
+	font-family: "Nexa-Thin";
+}.NexaLight {
+	font-family: "Nexa-Light";
+}.NexaBook {
+	font-family: "Nexa-Book";
+}.NexaRegular {
+	font-family: "Nexa-Regular";
+}.NexaBold {
+	font-family: "Nexa-Bold";
+}.NexaExtraBold {
+	font-family: "Nexa-ExtraBold";
+}.NexaHeavy {
+	font-family: "Nexa-Heavy";
+}
+
+body { font-family: "Nexa-Regular"!important; }
+
+h1, h2, h3, h4, h5 {
+	font-family: "Nexa-ExtraBold"!important;
+}
