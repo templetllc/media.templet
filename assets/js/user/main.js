@@ -141,8 +141,6 @@
         // Delete image from gallery
         $("body").on("click", "#deleteImage", function(e) {
             e.preventDefault();
-            var pathname = window.location.pathname;
-            
             swal({
                 icon: "info",
                 title: 'Are you sure?',
@@ -183,10 +181,7 @@
                                         }
                                     },
                                 }).then(function() {
-                                    console.log(pathname, pathname.indexOf('user'));
-                                    if(pathname.indexOf('user') >= 0){
-                                        location.reload(); // Reald when click ok
-                                    }
+                                    location.reload(); // Reald when click ok
                                 });
                             } else {
                                 swal("Opps !", response.error, {
