@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CustomResolveTenant;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -37,6 +38,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
+        $this->app['router']->aliasMiddleware('saml2.customResolveTenant', CustomResolveTenant::class);
+
         $this->routes(function () {
             Route::prefix('api')
                 ->middleware('api')
@@ -45,7 +48,10 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
+		            ->group(base_path('routes/web.php'));
+	          Route::middleware('saml')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/saml.php'));
         });
     }
 
