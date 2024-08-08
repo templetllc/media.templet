@@ -8,6 +8,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Slides\Saml2\Models\Tenant;
 
 class SettingsController extends Controller
 {
@@ -20,7 +21,10 @@ class SettingsController extends Controller
         $api = DB::table('api')->find(1);
         // Get seo data
         $seo = DB::table('seo')->find(1);
-        return view('admin.settings', ['settings' => $settings, 'api' => $api, 'seo' => $seo]);
+        // Get saml data
+        $saml_settings = $this->getSAMLSettings();
+
+        return view('admin.settings', ['settings' => $settings, 'api' => $api, 'saml_settings' => $saml_settings]);
     }
 
     // Set Env function
@@ -31,6 +35,56 @@ class SettingsController extends Controller
             file_put_contents($path, str_replace(
                 $name . '=' . env($name), $name . '=' . $value, file_get_contents($path)));
         }
+    }
+
+    // Obtain SAML Settings
+    private function getSAMLSettings() {
+      $saml_settings = [
+        "sp_metadata_url" => "",
+        "saml_status" => "",
+        "idp_entity_id" => "",
+        "idp_login_url" => "",
+        "idp_logout_url" => "",
+        "idp_x509_cert" => "",
+        "name_id_format" => "",
+        "name_id_format_options" => [
+          'unspecified',
+          'persistent',
+          'transient',
+          'emailAddress',
+          'X509SubjectName',
+          'WindowsDomainQualifiedName',
+          'kerberos',
+          'entity'
+        ],
+        "mapping_name" => "",
+        "mapping_email" => "",
+        "mapping_permission" => "",
+        "mapping_category" => "",
+        "optons_jit" => "",
+        "options_sync_user" => "",
+        "options_force_saml" => "",
+      ];
+
+      $tenant = Tenant::get()->first();
+      if ($tenant) {
+        $uuid = $tenant->uuid;
+        $saml_settings["sp_metadata_url"] = route('saml.metadata', ['uuid' => $uuid]);
+        $saml_settings["idp_entity_id"] = $tenant->idp_entity_id;
+        $saml_settings["idp_login_url"] = $tenant->idp_login_url;
+        $saml_settings["idp_logout_url"] = $tenant->idp_logout_url;
+        $saml_settings["name_id_format"] = $tenant->name_id_format;
+        $saml_settings["idp_x509_cert"] = $tenant->idp_x509_cert;
+        $saml_settings = $this->injectMetadataArray($saml_settings, $tenant->metadata);
+      }
+      return (object) $saml_settings;
+    }
+
+    private function injectMetadataArray($saml_settings, $metadata) {
+      foreach ($metadata as $key => $value) {
+          $saml_settings[$key] = $value;
+      }
+      return $saml_settings;
     }
 
     // Update information
@@ -295,6 +349,83 @@ class SettingsController extends Controller
                 'error' => ['Nothing changed on the form'],
             ]);
         }
+    }
+
+    public function UpdateSaml(Request $request)
+    {
+      // Validate form
+      $validator = Validator::make($request->all(), [
+          'idp_entity_id' => ['required', 'string'],
+          'idp_login_url' => ['required', 'string'],
+          'idp_x509_cert' => ['required', 'string'],
+          'mapping_email' => ['required', 'string'],
+          "saml_status" => ["boolean"],
+          "idp_entity_id" => ['string'],
+          "idp_login_url" => ['string'],
+          "idp_logout_url" => ['string'],
+          "idp_x509_cert" => ['string'],
+          "name_id_format" => ['string'],
+          "mapping_name" => ['string'],
+          "mapping_permission" => ['string'],
+          "mapping_category" => ['string'],
+          "optons_jit" => ["boolean"],
+          "options_sync_user" => ["boolean"],
+          "options_force_saml" => ["boolean"],
+      ]);
+
+      // Errors response
+      if ($validator->fails()) {
+          return response()->json(['error' => $validator->errors()->all()]);
+      }
+
+      $tenant = Tenant::get()->first();
+
+      // If seo table null create it
+      if ($tenant == null) {
+          // Create saml table with id = 1
+          $uuid = \Ramsey\Uuid\Uuid::uuid4();
+          $createSeoTable = Tenant::insert(['id' => 1, 'uuid' => $uuid, 'key' => 'default_idp']);
+      }
+
+      // Prepare data
+      $metadata_keys = [
+        "saml_status",
+        "mapping_name",
+        "mapping_email",
+        "mapping_permission",
+        "mapping_category",
+        "optons_jit",
+        "options_sync_user",
+        "options_force_saml"
+      ];
+      $metadata_values = [];
+      foreach($metadata_keys as $metadata_key) {
+          if (!empty($request[$metadata_key])) {
+              $metadata_values[$metadata_key] = $request[$metadata_key];
+          }
+      }
+
+      // Update saml
+      $updateSaml = Tenant::get()->first()->update([
+          'idp_entity_id' => $request['idp_entity_id'],
+          'idp_login_url' => $request['idp_login_url'],
+          'idp_logout_url' => $request['idp_logout_url'],
+          'idp_x509_cert' => $request['idp_x509_cert'],
+          'name_id_format' => $request['name_id_format'],
+          'metadata' => $metadata_values
+        ]);
+
+      if ($updateSaml) {
+          // Success response
+          return response()->json([
+              'success' => 'Updated Successfully',
+          ]);
+      } else {
+          // Error response
+          return response()->json([
+              'error' => ['Nothing changed on the form'],
+          ]);
+      }
 
     }
 }
