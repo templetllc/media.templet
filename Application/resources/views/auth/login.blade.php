@@ -57,6 +57,18 @@
              </div>
             <button type="submit" class="btn btn-primary w-100 btn-pd">{{__('Sign in')}}</button>
          </div>
+         @if($saml_sso_url)
+         <div class="hr-text">{{__('or')}}</div>
+         <div class="card-body">
+            <div class="row">
+               <div class="col">
+                  <a href="{{ $saml_sso_url }}" class="btn btn-primary w-100 btn-pd">
+                     {{__('Login with IdP')}}
+                  </a>
+               </div>
+            </div>
+         </div>
+         @endif
          @if(env('FACEBOOK_CLIENT_ID') != null && env('FACEBOOK_CLIENT_SECRET') != null && env('FACEBOOK_REDIRECT_URL') != null )
          <div class="hr-text">{{__('or')}}</div>
          <div class="card-body">
