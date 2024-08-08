@@ -163,7 +163,7 @@ Route::group(['middleware' => 'check.installation'], function () {
                 Route::get('admin/uploads/{id}', [App\Http\Controllers\Admin\UploadsController::class, 'viewImage'])->name('view.image');
                 Route::delete('admin/uploads/delete/{id}', [App\Http\Controllers\Admin\UploadsController::class, 'deleteImage']);
                 Route::get('admin/amazon', [App\Http\Controllers\Admin\AmazonS3Controller::class, 'index']);
-                Route::post('admin/amazon/update/store', [App\Http\Controllers\Admin\AmazonS3Controller::class, 'amazons3Store'])->name('wasabi.store');
+                Route::post('admin/amazon/update/store', [App\Http\Controllers\Admin\AmazonS3Controller::class, 'amazons3Store'])->name('amazon.store');
                 Route::get('admin/wasabi', [App\Http\Controllers\Admin\WasabiController::class, 'index']);
                 Route::post('admin/wasabi/update/store', [App\Http\Controllers\Admin\WasabiController::class, 'wasabiStore'])->name('wasabi.store');
                 Route::get('admin/ads', [App\Http\Controllers\Admin\AdsController::class, 'index']);
@@ -182,6 +182,7 @@ Route::group(['middleware' => 'check.installation'], function () {
                 Route::post('admin/settings/logofav/update', [App\Http\Controllers\Admin\SettingsController::class, 'UpdateLogoAndFavicon']);
                 Route::post('admin/settings/api/update', [App\Http\Controllers\Admin\SettingsController::class, 'UpdateApi']);
                 Route::post('admin/settings/seo/update', [App\Http\Controllers\Admin\SettingsController::class, 'UpdateSeo']);
+                Route::post('admin/settings/saml/update', [App\Http\Controllers\Admin\SettingsController::class, 'UpdateSaml']);
                 Route::get('admin/profile', [App\Http\Controllers\Admin\ProfileController::class, 'index']);
                 Route::post('admin/profile/update/info', [App\Http\Controllers\Admin\ProfileController::class, 'updateInfo']);
                 Route::post('admin/profile/update/password', [App\Http\Controllers\Admin\ProfileController::class, 'updatePassword']);
@@ -190,5 +191,3 @@ Route::group(['middleware' => 'check.installation'], function () {
     });
 
 });
-
-

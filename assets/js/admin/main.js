@@ -253,7 +253,7 @@
         $("body").on("submit", "#editUserForm", function(e) {
             e.preventDefault();
             $(".editUserBtn").prop("disabled", true); // disable add button when click
-            
+
             $.ajax({
                 url: BASE_URL + '/admin/user/edit/store',
                 type: "post",
@@ -412,7 +412,7 @@
                     },
                     success: function(response) {
                         if ($.isEmptyObject(response.error)) {
-                            $('.page-table' + id).remove(); // remove page 
+                            $('.page-table' + id).remove(); // remove page
                             swal("Success!", response.success, {
                                 icon: "success",
                                 buttons: {
@@ -575,7 +575,7 @@
                     },
                     success: function(response) {
                         if ($.isEmptyObject(response.error)) {
-                            $('.page-table' + id).remove(); // remove page 
+                            $('.page-table' + id).remove(); // remove page
                             swal("Success!", response.success, {
                                 icon: "success",
                                 buttons: {
@@ -805,7 +805,7 @@
     });
 
 
-    // Update api 
+    // Update api
     $("body").on("click", "#saveApiBtn", function(e) {
         e.preventDefault();
         $(".apiBtn").prop("disabled", true); // disable button when click
@@ -874,6 +874,48 @@
         });
     });
 
+    // Update Saml
+    $("body").on("click", ".samlBtn", function(e) {
+        e.preventDefault();
+        $(".samlBtn").prop("disabled", true); // disable button when click
+        $.ajax({
+            url: BASE_URL + '/admin/settings/saml/update',
+            type: "post",
+            data: {
+              'saml_status': $('#saml_status:checked').val(),
+              'idp_entity_id': $('#idp_entity_id').val(),
+              'idp_login_url': $('#idp_login_url').val(),
+              'idp_logout_url': $('#idp_logout_url').val(),
+              'idp_x509_cert': $('#idp_x509_cert').val(),
+              'name_id_format': $('#name_id_format').val(),
+              'mapping_name': $('#mapping_name').val(),
+              'mapping_email': $('#mapping_email').val(),
+              'mapping_permission': $('#mapping_permission').val(),
+              'mapping_category': $('#mapping_category').val(),
+              'optons_jit': $('#optons_jit:checked').val(),
+              'options_sync_user': $('#options_sync_user:checked').val(),
+              'options_force_saml': $('#options_force_saml:checked').val(),
+            },
+            dataType: 'json',
+            success: function(data) {
+                $(".samlBtn").prop("disabled", false); // active button when on success
+                if ($.isEmptyObject(data.error)) {
+                    $(".print-error-msg").css('display', 'none'); // hide errors
+                    swal("Success!", data.success, {
+                        icon: "success",
+                        buttons: {
+                            confirm: {
+                                className: 'btn btn-success'
+                            }
+                        },
+                    });
+                } else {
+                    printErrorMsg(data.error); // print error messages
+                }
+            }
+        });
+    });
+
     // Check new avatar image
     $("#avatar").change(function() {
         var fileExtension = ['jpeg', 'jpg', 'png']; // Allowed types
@@ -896,7 +938,7 @@
                     if (input_avatar.files && input_avatar.files[0]) {
                         var reader = new FileReader(); // Read new file
                         reader.onload = function(e) {
-                            $('#preview_avatar').attr('src', e.target.result); // preview new avatar 
+                            $('#preview_avatar').attr('src', e.target.result); // preview new avatar
                         }
                         reader.readAsDataURL(input_avatar.files[0]);
                     }
@@ -933,7 +975,7 @@
                         location.reload(); // Reald when click ok
                     });
                 } else {
-                    printErrorMsg(data.error); // Print error messages 
+                    printErrorMsg(data.error); // Print error messages
                 }
             }
         });
@@ -972,7 +1014,7 @@
         });
     });
 
-    // Add new page 
+    // Add new page
     $("body").on("click", "#addPageBtn", function(e) {
         e.preventDefault();
         $(".addPageBtn").prop("disabled", true); // disable add button when click
@@ -1007,7 +1049,7 @@
         });
     });
 
-    // Edit page 
+    // Edit page
     $("body").on("click", "#editPageBtn", function(e) {
         e.preventDefault();
         $(".editPageBtn").prop("disabled", true); // disable add button when click
@@ -1070,7 +1112,7 @@
                     },
                     success: function(response) {
                         if ($.isEmptyObject(response.error)) {
-                            $('.page-table' + id).remove(); // remove page 
+                            $('.page-table' + id).remove(); // remove page
                             swal("Success!", response.success, {
                                 icon: "success",
                                 buttons: {
