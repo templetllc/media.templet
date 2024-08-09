@@ -393,4 +393,23 @@ class MediaController extends Controller
         return $images;
 
     }
+
+    public function setImages(Request $request)
+    {
+        
+        $id = $request['id'];
+
+        $images = Image::findOrFail($id);
+
+        if(isset($request['description'])){
+            $images->update(['description_ai' => $request['description']]);
+        }
+
+        if(isset($request['tags'])){
+            $images->update(['tags_ai' => $request['tags']]);
+        }
+
+        
+
+    }
 }

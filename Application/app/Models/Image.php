@@ -31,7 +31,9 @@ class Image extends Model
         'thumbnail',
         'gallery',
         'active',
-        'approval'
+        'approval',
+        'description_ai',
+        'tags_ai'
     ];
 
     /**

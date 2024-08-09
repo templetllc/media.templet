@@ -32,3 +32,5 @@ Route::get('thumbExists/{image}', [App\Http\Controllers\MediaController::class, 
 Route::get('getImagesAddin/{category}/{preset}/{date}/{tags}/{view}/{page?}', [App\Http\Controllers\MediaController::class, 'getImagesAddin']);
 
 Route::get('getImagesTest/{category}/{preset}/{date}/{tags}/{width?}/{height?}/{page?}', [App\Http\Controllers\MediaController::class, 'getImagesTest']);
+
+Route::post('setImages', [App\Http\Controllers\MediaController::class, 'setImages']);
